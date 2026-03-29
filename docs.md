@@ -16,7 +16,7 @@
 | **Solución** | Portal web para pagar/recargar TUC online |
 | **Tarifa** | $2.350 CLP por ingreso |
 | **Pasarela de pago** | Transbank / Webpay Plus |
-| **Repositorio** | https://github.com/[TU-USUARIO]/estacionamiento-uc |
+| **Repositorio** | https://github.com/tbellnazer3-cmyk/estacionamiento-uc |
 
 ---
 
@@ -210,21 +210,26 @@ git push origin main
 ## 📅 Bitácora del Proyecto
 
 ### Día 0 — Setup inicial
-**Fecha:** [completar al ejecutar Prompt 1]
-**Estado:** ⏳ Pendiente
+**Fecha:** 29/03/2026
+**Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [ ] Diseño inicial del sitio (index.html monolítico)
-- [ ] CLAUDE.md creado con reglas del proyecto
-- [ ] docs.md creado con documentación base
-- [ ] Repositorio GitHub creado
-- [ ] Estructura de carpetas inicializada
+- [x] Diseño inicial del sitio (estacionamiento-uc.html monolítico existente)
+- [x] CLAUDE.md creado con reglas del proyecto
+- [x] docs.md creado con documentación base
+- [x] Repositorio GitHub creado: https://github.com/tbellnazer3-cmyk/estacionamiento-uc
+- [x] Estructura de carpetas inicializada (frontend/, backend/, skills/)
+- [x] .gitignore para Node.js creado
+- [x] .env.example con placeholders de variables de entorno
+- [x] README.md con descripción del proyecto e instrucciones de instalación
+- [x] Primer commit: "chore: setup inicial del proyecto"
+- [x] Push a GitHub (rama main)
 
 ---
 
-### Día 1 — [completar]
+### Día 1 — Frontend base modularizado
 **Fecha:** [DD/MM/YYYY]
-**Prompt ejecutado:** [número y nombre]
+**Prompt ejecutado:** Prompt 2
 **Estado:** ⏳ Pendiente
 
 **Tareas completadas:**
@@ -237,7 +242,7 @@ git push origin main
 - ...
 
 **Próximo paso:**
-- Ejecutar Prompt [N]
+- Ejecutar Prompt 2
 
 ---
 
@@ -249,7 +254,7 @@ git push origin main
 
 | # | Prompt | Estado | Fecha |
 |---|--------|--------|-------|
-| 1 | Setup inicial y GitHub | ⏳ Pendiente | — |
+| 1 | Setup inicial y GitHub | ✅ Completado | 29/03/2026 |
 | 2 | Frontend base modularizado | ⏳ Pendiente | — |
 | 3 | Backend Node.js + Express | ⏳ Pendiente | — |
 | 4 | Base de datos SQLite | ⏳ Pendiente | — |
@@ -261,4 +266,4 @@ git push origin main
 
 ---
 
-*Última actualización: Pendiente primera sesión de trabajo*
+*Última actualización: 29/03/2026 — Prompt 1 completado*
