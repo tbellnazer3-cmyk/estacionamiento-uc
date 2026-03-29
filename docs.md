@@ -271,6 +271,36 @@ git push origin main
 
 ---
 
+### Día 5 — Autenticación con JWT
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 6
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `jsonwebtoken` y `bcryptjs` agregados a `package.json`
+- [x] `src/services/auth.service.js` — hashPassword (bcrypt), comparePassword, generateToken (24h), verifyToken
+- [x] `src/middleware/auth.middleware.js` — `requireAuth` reescrito con `verifyToken` real; detecta `TokenExpiredError`
+- [x] `src/controllers/auth.controller.js` — `register`, `login`, `verify` conectados a DB + bcrypt + JWT
+- [x] `src/routes/auth.routes.js` — rutas `POST /register`, `POST /login`, `GET /verify`
+- [x] `src/db/seed.js` — actualizado para usar `hashPassword` de auth.service (hashes bcrypt reales)
+- [x] `frontend/login.html` — página de login/registro con tabs, validación inline, toggle contraseña
+- [x] `frontend/js/app.js` — `procesarPago` redirige a login si no hay sesión; `updateNav` muestra email/logout; `prefillForm` pre-carga email y TUC del usuario logueado
+- [x] `frontend/index.html` — `<span id="nav-auth-item">` en nav para estado de sesión
+- [x] JWT se guarda en `sessionStorage` (no `localStorage`)
+- [x] Commit: "feat: sistema de autenticación con JWT"
+- [x] Push a GitHub
+
+**Problemas encontrados:**
+- Ninguno
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Ejecutar Prompt 7 (Dashboard del estudiante)
+
+---
+
 ### Día 4 — Integración Webpay Plus (sandbox)
 **Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 5
@@ -404,11 +434,11 @@ git push origin main
 | 3 | Backend Node.js + Express | ✅ Completado | 29/03/2026 |
 | 4 | Base de datos SQLite | ✅ Completado | 29/03/2026 |
 | 5 | Integración Webpay | ✅ Completado | 29/03/2026 |
-| 6 | Autenticación JWT | ⏳ Pendiente | — |
+| 6 | Autenticación JWT | ✅ Completado | 29/03/2026 |
 | 7 | Dashboard del estudiante | ⏳ Pendiente | — |
 | 8 | Notificaciones por correo | ⏳ Pendiente | — |
 | 9 | Deploy y producción | ⏳ Pendiente | — |
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 5 completado*
+*Última actualización: 29/03/2026 — Prompt 6 completado*
