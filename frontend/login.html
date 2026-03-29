@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EstacionaUC — Iniciar sesión</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul) 100%); }
+    .auth-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 6rem 1.5rem 3rem; }
+    .auth-card { background: var(--blanco); border-radius: 24px; padding: 2.75rem 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 24px 60px rgba(0,0,0,0.25); }
+    .auth-logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
+    .auth-logo-icon { width: 42px; height: 42px; background: var(--azul); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .auth-logo-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--texto); }
+    .auth-logo-sub { font-size: 0.65rem; color: var(--gris); text-transform: uppercase; letter-spacing: 0.12em; }
+    .auth-tabs { display: flex; gap: 0.4rem; background: var(--gris-claro); border-radius: 10px; padding: 0.3rem; margin-bottom: 2rem; }
+    .auth-tab { flex: 1; padding: 0.6rem; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.87rem; font-weight: 500; cursor: pointer; background: transparent; color: var(--gris); transition: all 0.2s; }
+    .auth-tab.active { background: var(--blanco); color: var(--azul); font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .auth-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .auth-sub { color: var(--gris); font-size: 0.88rem; margin-bottom: 1.75rem; line-height: 1.5; }
+    .auth-sub strong { color: var(--azul); }
+    .btn-auth { width: 100%; padding: 0.9rem; background: var(--azul); color: var(--blanco); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.97rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+    .btn-auth:hover { background: var(--azul-oscuro); transform: translateY(-1px); }
+    .btn-auth:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .auth-divider { text-align: center; color: var(--gris); font-size: 0.8rem; margin: 1.25rem 0; position: relative; }
+    .auth-divider::before, .auth-divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--gris-claro); }
+    .auth-divider::before { left: 0; }
+    .auth-divider::after { right: 0; }
+    .auth-alert { border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    .auth-alert.error { background: rgba(220,38,38,0.08); color: var(--rojo); border: 1px solid rgba(220,38,38,0.2); display: block; }
+    .auth-alert.success { background: rgba(22,163,74,0.08); color: var(--verde); border: 1px solid rgba(22,163,74,0.2); display: block; }
+    .password-wrap { position: relative; }
+    .password-wrap input { padding-right: 3rem; }
+    .toggle-pw { position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--gris); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🅿️</div>
+    <div>
+      <div class="nav-logo-text">EstacionaUC</div>
+      <div class="nav-logo-sub">San Joaquín · Campus</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">← Volver al inicio</a>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🅿️</div>
+      <div>
+        <div class="auth-logo-name">EstacionaUC</div>
+        <div class="auth-logo-sub">Campus San Joaquín</div>
+      </div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login-btn"    onclick="showTab('login')">Iniciar sesión</button>
+      <button class="auth-tab"        id="tab-register-btn" onclick="showTab('register')">Crear cuenta</button>
+    </div>
+
+    <div id="auth-alert" class="auth-alert"></div>
+
+    <!-- LOGIN -->
+    <div id="tab-login">
+      <div class="auth-title">Bienvenido de vuelta</div>
+      <p class="auth-sub">Usa tu correo <strong>@uc.cl</strong> o <strong>@puc.cl</strong> para acceder.</p>
+
+      <form id="form-login" novalidate>
+        <div class="form-group">
+          <label for="login-email">Correo UC</label>
+          <input type="email" id="login-email" placeholder="tu.nombre@uc.cl" autocomplete="email">
+          <div class="error-msg" id="err-login-email"></div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <div class="password-wrap">
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="toggle-pw" onclick="togglePw('login-password', this)">👁</button>
+          </div>
+          <div class="error-msg" id="err-login-password"></div>
+        </div>
+        <button type="submit" class="btn-auth" id="btn-login">Iniciar sesión →</button>
+      </form>
+    </div>
+
+    <!-- REGISTRO -->
+    <div id="tab-register" style="display:none;">
+      <div class="auth-title">Crear cuenta</div>
+      <p class="auth-sub">Registra tu correo <strong>@uc.cl</strong> y vincula tu TUC para pagar online.</p>
+
+      <form id="form-register" novalidate>
+        <div class="form-group">
+          <label for="reg-email">Correo UC</label>
+          <input type="email" id="reg-email" placeholder="tu.nombre@uc.cl" autocomplete="email">
+          <div class="error-msg" id="err-reg-email"></div>
+        </div>
+        <div class="form-group">
+          <label for="reg-tuc">Número de TUC</label>
+          <input type="text" id="reg-tuc" placeholder="Ej: 2024-0001234-7" autocomplete="off">
+          <div class="error-msg" id="err-reg-tuc"></div>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <div class="password-wrap">
+            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+            <button type="button" class="toggle-pw" onclick="togglePw('reg-password', this)">👁</button>
+          </div>
+          <div class="error-msg" id="err-reg-password"></div>
+        </div>
+        <button type="submit" class="btn-auth" id="btn-register">Crear cuenta →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api';
+  const UC_EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@(uc\.cl|puc\.cl)$/i;
+  const TUC_RE      = /^\d{4}-\d{7}-\d$/;
+
+  // Si ya está logueado, redirigir
+  if (sessionStorage.getItem('auth_token')) {
+    window.location.href = new URLSearchParams(location.search).get('redirect') || 'index.html';
+  }
+
+  function showTab(tab) {
+    document.getElementById('tab-login').style.display    = tab === 'login'    ? 'block' : 'none';
+    document.getElementById('tab-register').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('tab-login-btn').classList.toggle('active',    tab === 'login');
+    document.getElementById('tab-register-btn').classList.toggle('active', tab === 'register');
+    clearAlert();
+  }
+
+  function showAlert(msg, type = 'error') {
+    const el = document.getElementById('auth-alert');
+    el.textContent = msg;
+    el.className = 'auth-alert ' + type;
+  }
+
+  function clearAlert() {
+    const el = document.getElementById('auth-alert');
+    el.className = 'auth-alert';
+  }
+
+  function fieldErr(inputId, errId, msg) {
+    const input = document.getElementById(inputId);
+    const err   = document.getElementById(errId);
+    input.classList.add('field-error');
+    err.textContent = msg;
+    err.classList.add('visible');
+  }
+
+  function clearErr(inputId, errId) {
+    document.getElementById(inputId).classList.remove('field-error');
+    document.getElementById(errId).classList.remove('visible');
+  }
+
+  function togglePw(inputId, btn) {
+    const input = document.getElementById(inputId);
+    input.type  = input.type === 'password' ? 'text' : 'password';
+    btn.textContent = input.type === 'password' ? '👁' : '🙈';
+  }
+
+  function saveSession(data) {
+    sessionStorage.setItem('auth_token',    data.token);
+    sessionStorage.setItem('auth_user',     JSON.stringify(data.user));
+  }
+
+  // ─── LOGIN ───────────────────────────────────────────────────────────────────
+  document.getElementById('form-login').addEventListener('submit', async e => {
+    e.preventDefault();
+    clearErr('login-email', 'err-login-email');
+    clearErr('login-password', 'err-login-password');
+    clearAlert();
+
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    let valid = true;
+
+    if (!UC_EMAIL_RE.test(email)) { fieldErr('login-email', 'err-login-email', 'Ingresa un correo @uc.cl o @puc.cl.'); valid = false; }
+    if (password.length < 6)      { fieldErr('login-password', 'err-login-password', 'Mínimo 6 caracteres.'); valid = false; }
+    if (!valid) return;
+
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true; btn.textContent = 'Entrando...';
+
+    try {
+      const res  = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || data.errors?.[0]?.msg);
+
+      saveSession(data.data);
+      const redirect = new URLSearchParams(location.search).get('redirect') || 'index.html';
+      window.location.href = redirect;
+    } catch (err) {
+      showAlert(err.message);
+      btn.disabled = false; btn.textContent = 'Iniciar sesión →';
+    }
+  });
+
+  // ─── REGISTRO ────────────────────────────────────────────────────────────────
+  document.getElementById('form-register').addEventListener('submit', async e => {
+    e.preventDefault();
+    clearErr('reg-email', 'err-reg-email');
+    clearErr('reg-tuc',   'err-reg-tuc');
+    clearErr('reg-password', 'err-reg-password');
+    clearAlert();
+
+    const email    = document.getElementById('reg-email').value.trim();
+    const tuc      = document.getElementById('reg-tuc').value.trim();
+    const password = document.getElementById('reg-password').value;
+    let valid = true;
+
+    if (!UC_EMAIL_RE.test(email)) { fieldErr('reg-email', 'err-reg-email', 'Ingresa un correo @uc.cl o @puc.cl.'); valid = false; }
+    if (!TUC_RE.test(tuc))        { fieldErr('reg-tuc',   'err-reg-tuc',   'Formato: YYYY-NNNNNNN-D'); valid = false; }
+    if (password.length < 6)      { fieldErr('reg-password', 'err-reg-password', 'Mínimo 6 caracteres.'); valid = false; }
+    if (!valid) return;
+
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true; btn.textContent = 'Creando cuenta...';
+
+    try {
+      const res  = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, tuc_number: tuc }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || data.errors?.[0]?.msg);
+
+      saveSession(data.data);
+      showAlert('¡Cuenta creada! Redirigiendo...', 'success');
+      setTimeout(() => {
+        const redirect = new URLSearchParams(location.search).get('redirect') || 'index.html';
+        window.location.href = redirect;
+      }, 1200);
+    } catch (err) {
+      showAlert(err.message);
+      btn.disabled = false; btn.textContent = 'Crear cuenta →';
+    }
+  });
+</script>
+</body>
+</html>
