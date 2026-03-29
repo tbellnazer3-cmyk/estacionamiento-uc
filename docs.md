@@ -271,6 +271,39 @@ git push origin main
 
 ---
 
+### Día 6 — Dashboard del estudiante
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 7
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `src/controllers/user.controller.js` — `getDashboard` (saldo + deuda + 10 recientes) y `getHistory` (paginado)
+- [x] `src/routes/user.routes.js` — `GET /api/user/dashboard` y `GET /api/user/history`
+- [x] `src/server.js` — registrada la ruta `/api/user`
+- [x] `frontend/dashboard.html` — dashboard completo con:
+  - Card saldo TUC (gradiente azul destacado)
+  - Card estado de deuda (rojo si hay deuda, verde si está al día)
+  - Card total de transacciones
+  - Banner de deuda con botón "Pagar ahora" (visible solo si hay deuda)
+  - Botones de acción rápida (pagar / recargar / inicio)
+  - Tabla historial con badge de tipo, monto coloreado, folio, estado y fecha
+  - Paginación dinámica
+  - Auth guard: redirige a login si no hay sesión
+- [x] `frontend/js/app.js` — nav actualizado con link "Mi cuenta" → dashboard.html
+- [x] Commit: "feat: dashboard del estudiante con historial"
+- [x] Push a GitHub
+
+**Problemas encontrados:**
+- Ninguno
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Ejecutar Prompt 8 (Notificaciones por correo)
+
+---
+
 ### Día 5 — Autenticación con JWT
 **Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 6
@@ -435,10 +468,10 @@ git push origin main
 | 4 | Base de datos SQLite | ✅ Completado | 29/03/2026 |
 | 5 | Integración Webpay | ✅ Completado | 29/03/2026 |
 | 6 | Autenticación JWT | ✅ Completado | 29/03/2026 |
-| 7 | Dashboard del estudiante | ⏳ Pendiente | — |
+| 7 | Dashboard del estudiante | ✅ Completado | 29/03/2026 |
 | 8 | Notificaciones por correo | ⏳ Pendiente | — |
 | 9 | Deploy y producción | ⏳ Pendiente | — |
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 6 completado*
+*Última actualización: 29/03/2026 — Prompt 7 completado*
