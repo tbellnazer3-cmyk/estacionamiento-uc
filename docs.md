@@ -121,6 +121,50 @@ Copiar `.env.example` a `.env` y completar los valores.
 
 ---
 
+## 🧪 Cómo probar pagos en Sandbox (Webpay Plus)
+
+### Requisitos previos
+```bash
+cd backend
+npm install       # incluye transbank-sdk
+npm run seed      # carga usuarios y saldos de prueba
+npm run dev       # servidor en http://localhost:3000
+```
+Abre `frontend/index.html` con Live Server (VS Code) en `http://localhost:5500`.
+
+### Flujo de prueba paso a paso
+
+1. **Ingresar datos** en el formulario del frontend:
+   - Correo: `estudiante1@uc.cl`
+   - TUC: `2024-0007654-3` (esta TUC tiene saldo 0 → tiene deuda)
+   - Pestaña "Pagar deuda" → clic en **Pagar**
+
+2. **Ser redirigido a Webpay** (ambiente de integración de Transbank)
+
+3. **Completar el pago** con los datos de prueba:
+
+| Campo | Valor |
+|-------|-------|
+| Tarjeta de crédito | `4051 8856 0044 6623` |
+| CVV | `123` |
+| Vencimiento | `11/25` |
+| RUT titular | `11.111.111-1` |
+| Clave bancaria | `123` |
+
+4. **Resultado**: Webpay redirige a `http://localhost:5500/webpay-return.html`
+   - Si fue aprobado → pantalla verde con folio y código de autorización
+   - Si fue rechazado → pantalla roja
+   - Si se canceló → pantalla gris
+
+### Variables de entorno para producción (cuando se obtengan)
+```
+TRANSBANK_API_KEY=<api-key-real>
+TRANSBANK_COMMERCE_CODE=<commerce-code-real>
+```
+Y en `transbank.service.js` cambiar `Environment.Integration` por `Environment.Production`.
+
+---
+
 ## 🧪 Credenciales de Prueba (Sandbox Transbank)
 
 Usar en ambiente de integración para probar pagos sin dinero real:
@@ -227,6 +271,38 @@ git push origin main
 
 ---
 
+### Día 4 — Integración Webpay Plus (sandbox)
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 5
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `transbank-sdk` agregado a `package.json`
+- [x] `src/services/transbank.service.js` — encapsula `crearTransaccion`, `confirmarTransaccion`, `estaAutorizado`
+- [x] Ambiente de integración configurado con `IntegrationCommerceCodes.WEBPAY_PLUS` y `IntegrationApiKeys.WEBPAY`
+- [x] Flujo completo implementado: init → Webpay → return → confirmar → actualizar saldo
+- [x] `POST /api/payment/init` — crea transacción en DB (pending) e inicia en Webpay, devuelve `webpay_url`
+- [x] `GET|POST /api/payment/return` — recibe token_ws, llama commit, actualiza DB y TUC, redirige al frontend
+- [x] `POST /api/payment/confirm` — permite consultar estado por folio
+- [x] `Transaction.findByWebpayToken` y `Transaction.updateWebpayToken` agregados al modelo
+- [x] `express.urlencoded` habilitado en server.js (necesario para form POST de Webpay)
+- [x] `frontend/js/app.js` actualizado: `procesarPago` llama `/api/payment/init` y redirige a Webpay URL
+- [x] `frontend/webpay-return.html` — página de resultado (éxito / rechazado / cancelado / error)
+- [x] `BACKEND_URL` agregado a `.env` y `.env.example`
+- [x] Commit: "feat: integración Webpay Plus en ambiente sandbox"
+- [x] Push a GitHub
+
+**Problemas encontrados:**
+- Ninguno
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Ejecutar Prompt 6 (Autenticación JWT)
+
+---
+
 ### Día 3 — Base de datos SQLite
 **Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 4
@@ -327,7 +403,7 @@ git push origin main
 | 2 | Frontend base modularizado | ✅ Completado | 29/03/2026 |
 | 3 | Backend Node.js + Express | ✅ Completado | 29/03/2026 |
 | 4 | Base de datos SQLite | ✅ Completado | 29/03/2026 |
-| 5 | Integración Webpay | ⏳ Pendiente | — |
+| 5 | Integración Webpay | ✅ Completado | 29/03/2026 |
 | 6 | Autenticación JWT | ⏳ Pendiente | — |
 | 7 | Dashboard del estudiante | ⏳ Pendiente | — |
 | 8 | Notificaciones por correo | ⏳ Pendiente | — |
@@ -335,4 +411,4 @@ git push origin main
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 4 completado*
+*Última actualización: 29/03/2026 — Prompt 5 completado*
