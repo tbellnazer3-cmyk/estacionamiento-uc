@@ -227,6 +227,36 @@ git push origin main
 
 ---
 
+### Día 3 — Base de datos SQLite
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 4
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `better-sqlite3` agregado a `package.json` (+ script `npm run seed`)
+- [x] `src/models/schema.sql` — tablas `users`, `tuc_balances`, `transactions` con índices y constraints
+- [x] `src/db/database.js` — conexión singleton, aplica schema al iniciar, cierra al apagar
+- [x] `src/models/User.js` — findByEmail, findById, findByTuc, create, emailExists, tucExists
+- [x] `src/models/TucBalance.js` — findByTuc, upsert, addBalance
+- [x] `src/models/Transaction.js` — create, findById, findByFolio, updateStatus, findByUser, findByUserPaginated
+- [x] Controllers `payment`, `tuc` y `auth` conectados a la DB real (reemplaza datos mock)
+- [x] `src/db/seed.js` — 3 usuarios, 3 saldos TUC, 4 transacciones de prueba
+- [x] Commit: "feat: base de datos SQLite con modelos y seed"
+- [x] Push a GitHub
+
+**Problemas encontrados:**
+- Ninguno
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Instalar Node.js si aún no está instalado
+- Ejecutar `npm install && npm run seed` en `/backend/`
+- Ejecutar Prompt 5 (Integración Webpay)
+
+---
+
 ### Día 2 — Backend Node.js + Express
 **Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 3
@@ -296,7 +326,7 @@ git push origin main
 | 1 | Setup inicial y GitHub | ✅ Completado | 29/03/2026 |
 | 2 | Frontend base modularizado | ✅ Completado | 29/03/2026 |
 | 3 | Backend Node.js + Express | ✅ Completado | 29/03/2026 |
-| 4 | Base de datos SQLite | ⏳ Pendiente | — |
+| 4 | Base de datos SQLite | ✅ Completado | 29/03/2026 |
 | 5 | Integración Webpay | ⏳ Pendiente | — |
 | 6 | Autenticación JWT | ⏳ Pendiente | — |
 | 7 | Dashboard del estudiante | ⏳ Pendiente | — |
@@ -305,4 +335,4 @@ git push origin main
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 3 completado*
+*Última actualización: 29/03/2026 — Prompt 4 completado*
