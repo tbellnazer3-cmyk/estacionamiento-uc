@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EstacionaUC — Resultado del pago</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; justify-content: center; align-items: center; padding: 2rem; }
+    .result-card { background: var(--blanco); border-radius: 24px; padding: 3rem 2.5rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.1); }
+    .result-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .result-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .result-card .sub { color: var(--gris); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.75rem; }
+    .detail-table { background: var(--crema); border-radius: 12px; padding: 1.25rem; text-align: left; margin-bottom: 1.75rem; }
+    .detail-row { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.87rem; }
+    .detail-row:not(:last-child) { border-bottom: 1px solid var(--gris-claro); }
+    .detail-row span:first-child { color: var(--gris); }
+    .detail-row span:last-child  { font-weight: 600; }
+    .btn-back { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--azul); color: var(--blanco); border: none; border-radius: 10px; padding: 0.9rem 2rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+    .btn-back:hover { background: var(--azul-oscuro); }
+    .status-failed  h2 { color: var(--rojo); }
+    .status-cancelled h2 { color: var(--gris); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🅿️</div>
+    <div>
+      <div class="nav-logo-text">EstacionaUC</div>
+      <div class="nav-logo-sub">San Joaquín · Campus</div>
+    </div>
+  </div>
+</nav>
+
+<div class="result-card" id="result-card">
+  <!-- contenido inyectado por JS -->
+</div>
+
+<script>
+  const params  = new URLSearchParams(window.location.search);
+  const status  = params.get('status') || 'error';
+  const folio   = params.get('folio')  || '—';
+  const amount  = params.get('amount');
+  const type    = params.get('type');
+  const tuc     = params.get('tuc');
+  const auth    = params.get('auth_code');
+  const email   = sessionStorage.getItem('pago_email') || '—';
+
+  const card = document.getElementById('result-card');
+  card.classList.add('status-' + status);
+
+  const formatAmount = v => v ? '$' + Number(v).toLocaleString('es-CL') : '—';
+  const typeLabel    = type === 'deuda' ? 'Pago de deuda' : type === 'recarga' ? 'Recarga de saldo' : '—';
+
+  const configs = {
+    success: {
+      icon:    '✅',
+      title:   '¡Pago exitoso!',
+      sub:     'Tu TUC ha sido actualizada. Ya puedes ingresar al campus sin pasar por el tótem.',
+      details: true,
+    },
+    failed: {
+      icon:    '❌',
+      title:   'Pago rechazado',
+      sub:     'La transacción fue rechazada por Transbank. Puedes intentarlo nuevamente.',
+      details: false,
+    },
+    cancelled: {
+      icon:    '↩️',
+      title:   'Pago cancelado',
+      sub:     'Cancelaste el pago en Webpay. Tu TUC no fue modificada.',
+      details: false,
+    },
+    error: {
+      icon:    '⚠️',
+      title:   'Error inesperado',
+      sub:     'Ocurrió un problema al procesar el pago. Intenta de nuevo o contacta soporte.',
+      details: false,
+    },
+  };
+
+  const cfg = configs[status] || configs.error;
+
+  let detailsHtml = '';
+  if (cfg.details) {
+    detailsHtml = `
+      <div class="detail-table">
+        <div class="detail-row"><span>Tipo</span><span>${typeLabel}</span></div>
+        <div class="detail-row"><span>Monto</span><span>${formatAmount(amount)}</span></div>
+        <div class="detail-row"><span>TUC</span><span>${tuc || '—'}</span></div>
+        <div class="detail-row"><span>Folio</span><span>${folio}</span></div>
+        ${auth ? `<div class="detail-row"><span>Código autorización</span><span>${auth}</span></div>` : ''}
+        <div class="detail-row"><span>Comprobante</span><span>${email}</span></div>
+      </div>`;
+  } else if (folio && folio !== '—') {
+    detailsHtml = `
+      <div class="detail-table">
+        <div class="detail-row"><span>Folio</span><span>${folio}</span></div>
+      </div>`;
+  }
+
+  card.innerHTML = `
+    <div class="result-icon">${cfg.icon}</div>
+    <h2>${cfg.title}</h2>
+    <p class="sub">${cfg.sub}</p>
+    ${detailsHtml}
+    <a href="index.html" class="btn-back">← Volver al inicio</a>
+  `;
+</script>
+</body>
+</html>

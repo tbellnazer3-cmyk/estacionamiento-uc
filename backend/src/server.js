@@ -21,6 +21,7 @@ app.use(cors({
 }));
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false })); // necesario para el return de Webpay
 
 // ─── Rutas ────────────────────────────────────────────────────────────────────
 app.use('/api/payment', paymentRoutes);

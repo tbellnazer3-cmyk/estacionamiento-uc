@@ -1,7 +1,9 @@
+const API_BASE = 'http://localhost:3000/api';
+
 // ─── Validation helpers ───────────────────────────────────────────────────────
 
 const UC_EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@(uc\.cl|puc\.cl)$/i;
-const TUC_REGEX = /^\d{4}-\d{7}-\d$/;
+const TUC_REGEX      = /^\d{4}-\d{7}-\d$/;
 
 function validateEmail(value) {
   if (!value.trim()) return 'El correo es obligatorio.';
@@ -26,17 +28,22 @@ function clearFieldError(inputEl, msgEl) {
   msgEl.classList.remove('visible');
 }
 
+function setButtonLoading(btn, loading) {
+  btn.disabled = loading;
+  btn.textContent = loading ? '⏳ Redirigiendo a Webpay...' : btn.dataset.original;
+}
+
 // ─── Live validation on blur ──────────────────────────────────────────────────
 
 function attachLiveValidation(inputId, errorId, validatorFn) {
-  const input = document.getElementById(inputId);
+  const input   = document.getElementById(inputId);
   const errorEl = document.getElementById(errorId);
   if (!input || !errorEl) return;
 
   input.addEventListener('blur', () => {
     const err = validatorFn(input.value);
     if (err) showFieldError(input, errorEl, err);
-    else clearFieldError(input, errorEl);
+    else     clearFieldError(input, errorEl);
   });
 
   input.addEventListener('input', () => {
@@ -51,7 +58,7 @@ function attachLiveValidation(inputId, errorId, validatorFn) {
 
 function setTab(tab, btn) {
   document.getElementById('tab-pagar-deuda').style.display = tab === 'pagar-deuda' ? 'block' : 'none';
-  document.getElementById('tab-recargar').style.display = tab === 'recargar' ? 'block' : 'none';
+  document.getElementById('tab-recargar').style.display    = tab === 'recargar'    ? 'block' : 'none';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
@@ -78,16 +85,16 @@ function actualizarTotal(val) {
   document.querySelectorAll('.monto-btn').forEach(b => b.classList.remove('selected'));
 }
 
-// ─── Pago ─────────────────────────────────────────────────────────────────────
+// ─── Iniciar pago con Webpay ──────────────────────────────────────────────────
 
-function procesarPago(tipo, monto) {
-  const emailId = tipo === 'deuda' ? 'email-deuda' : 'email-recarga';
-  const tucId   = tipo === 'deuda' ? 'tuc-deuda'   : 'tuc-recarga';
-  const emailErrorId = tipo === 'deuda' ? 'error-email-deuda' : 'error-email-recarga';
-  const tucErrorId   = tipo === 'deuda' ? 'error-tuc-deuda'   : 'error-tuc-recarga';
+async function procesarPago(tipo, montoDisplay) {
+  const emailId      = tipo === 'deuda' ? 'email-deuda'        : 'email-recarga';
+  const tucId        = tipo === 'deuda' ? 'tuc-deuda'          : 'tuc-recarga';
+  const emailErrorId = tipo === 'deuda' ? 'error-email-deuda'  : 'error-email-recarga';
+  const tucErrorId   = tipo === 'deuda' ? 'error-tuc-deuda'    : 'error-tuc-recarga';
 
-  const emailEl = document.getElementById(emailId);
-  const tucEl   = document.getElementById(tucId);
+  const emailEl    = document.getElementById(emailId);
+  const tucEl      = document.getElementById(tucId);
   const emailErrEl = document.getElementById(emailErrorId);
   const tucErrEl   = document.getElementById(tucErrorId);
 
@@ -95,36 +102,61 @@ function procesarPago(tipo, monto) {
   const tucErr   = validateTuc(tucEl.value);
 
   if (emailErr) showFieldError(emailEl, emailErrEl, emailErr);
-  else clearFieldError(emailEl, emailErrEl);
-
-  if (tucErr) showFieldError(tucEl, tucErrEl, tucErr);
-  else clearFieldError(tucEl, tucErrEl);
+  else          clearFieldError(emailEl, emailErrEl);
+  if (tucErr)   showFieldError(tucEl,   tucErrEl,   tucErr);
+  else          clearFieldError(tucEl,   tucErrEl);
 
   if (emailErr || tucErr) return;
 
-  // Si monto es $0 en la pestaña de recarga, bloquear
-  if (tipo === 'recarga') {
-    const montoVal = parseInt(document.getElementById('monto-input').value) || 0;
-    if (montoVal < 2350) {
-      alert('El monto mínimo de recarga es $2.350.');
-      return;
-    }
+  let amount = tipo === 'deuda' ? 2350 : (parseInt(document.getElementById('monto-input').value) || 0);
+  if (tipo === 'recarga' && amount < 2350) {
+    alert('El monto mínimo de recarga es $2.350.');
+    return;
   }
 
-  const now = new Date();
-  const hora  = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
-  const fecha = now.toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
-  const folio = 'EST-' + Math.floor(Math.random() * 900000 + 100000);
+  // Guardar en sessionStorage para mostrar en la página de resultado
+  sessionStorage.setItem('pago_email',  emailEl.value.trim());
+  sessionStorage.setItem('pago_tuc',    tucEl.value.trim());
+  sessionStorage.setItem('pago_tipo',   tipo);
+  sessionStorage.setItem('pago_monto',  amount);
 
-  document.getElementById('modal-details').innerHTML = `
-    <div class="modal-row"><span>Tipo</span><span>${tipo === 'deuda' ? 'Pago de deuda' : 'Recarga de saldo'}</span></div>
-    <div class="modal-row"><span>Monto</span><span>${monto}</span></div>
-    <div class="modal-row"><span>TUC</span><span>${tucEl.value.trim()}</span></div>
-    <div class="modal-row"><span>Fecha y hora</span><span>${fecha}, ${hora}</span></div>
-    <div class="modal-row"><span>Folio</span><span>${folio}</span></div>
-    <div class="modal-row"><span>Comprobante</span><span>${emailEl.value.trim()}</span></div>
-  `;
-  document.getElementById('modal').classList.add('show');
+  const btn = document.querySelector(`#tab-${tipo === 'deuda' ? 'pagar-deuda' : 'recargar'} .btn-pagar`);
+  if (btn) {
+    btn.dataset.original = btn.textContent;
+    setButtonLoading(btn, true);
+  }
+
+  try {
+    // Obtener token de sesión mock (Prompt 6 implementará JWT real)
+    const token = sessionStorage.getItem('auth_token') || 'mock-token';
+
+    const response = await fetch(`${API_BASE}/payment/init`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        email:      emailEl.value.trim(),
+        tuc_number: tucEl.value.trim(),
+        amount,
+        type:       tipo,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || data.errors?.[0]?.msg || 'Error al iniciar el pago.');
+    }
+
+    // Redirigir al usuario al formulario de pago de Webpay
+    window.location.href = data.webpay_url;
+
+  } catch (err) {
+    if (btn) setButtonLoading(btn, false);
+    alert('Error al conectar con el servidor: ' + err.message);
+  }
 }
 
 function cerrarModal() {
@@ -140,14 +172,11 @@ function toggleFaq(el) {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Live validation
   attachLiveValidation('email-deuda',   'error-email-deuda',   validateEmail);
   attachLiveValidation('tuc-deuda',     'error-tuc-deuda',     validateTuc);
   attachLiveValidation('email-recarga', 'error-email-recarga', validateEmail);
   attachLiveValidation('tuc-recarga',   'error-tuc-recarga',   validateTuc);
 
-  // Close modal clicking outside
-  document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) cerrarModal();
-  });
+  const modal = document.getElementById('modal');
+  if (modal) modal.addEventListener('click', e => { if (e.target === modal) cerrarModal(); });
 });
