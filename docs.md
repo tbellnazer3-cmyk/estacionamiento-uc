@@ -228,21 +228,28 @@ git push origin main
 ---
 
 ### Día 1 — Frontend base modularizado
-**Fecha:** [DD/MM/YYYY]
+**Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 2
-**Estado:** ⏳ Pendiente
+**Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [ ] ...
+- [x] `estacionamiento-uc.html` movido y adaptado como `frontend/index.html`
+- [x] CSS extraído a `frontend/css/styles.css` (estilos + clases de error de validación)
+- [x] JS extraído a `frontend/js/app.js` (lógica de tabs, pagos, validación)
+- [x] `frontend/js/api.js` creado con estructura lista para conectar al backend (Prompt 3)
+- [x] Favicon SVG creado en `frontend/assets/favicon.svg` (icono P azul/dorado)
+- [x] Validación mejorada: regex estricta para @uc.cl / @puc.cl, formato TUC, mensajes inline
+- [x] Commit: "feat: frontend base separado en módulos"
+- [x] Push a GitHub
 
 **Problemas encontrados:**
-- ...
+- Ninguno
 
 **Skills creadas:**
-- ...
+- Ninguna nueva (primera iteración de cada patrón)
 
 **Próximo paso:**
-- Ejecutar Prompt 2
+- Ejecutar Prompt 3 (Backend Node.js + Express)
 
 ---
 
@@ -255,7 +262,7 @@ git push origin main
 | # | Prompt | Estado | Fecha |
 |---|--------|--------|-------|
 | 1 | Setup inicial y GitHub | ✅ Completado | 29/03/2026 |
-| 2 | Frontend base modularizado | ⏳ Pendiente | — |
+| 2 | Frontend base modularizado | ✅ Completado | 29/03/2026 |
 | 3 | Backend Node.js + Express | ⏳ Pendiente | — |
 | 4 | Base de datos SQLite | ⏳ Pendiente | — |
 | 5 | Integración Webpay | ⏳ Pendiente | — |
@@ -266,4 +273,4 @@ git push origin main
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 1 completado*
+*Última actualización: 29/03/2026 — Prompt 2 completado*
