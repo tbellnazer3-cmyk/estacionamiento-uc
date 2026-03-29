@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EstacionaUC — Pago Online de Estacionamiento</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🅿️</div>
+    <div>
+      <div class="nav-logo-text">EstacionaUC</div>
+      <div class="nav-logo-sub">San Joaquín · Campus</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#como">Cómo funciona</a>
+    <a href="#pagar">Recargar TUC</a>
+    <a href="#faq">Preguntas</a>
+    <a href="#pagar" class="nav-cta">Pagar ahora →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-label">Estacionamiento Campus San Joaquín</div>
+      <h1>Paga tu estacionamiento <em>sin hacer fila</em></h1>
+      <p class="hero-desc">
+        Olvídate de los tótems y las filas interminables. Recarga tu TUC en segundos desde cualquier lugar, antes o después de entrar al campus.
+      </p>
+      <div class="hero-actions">
+        <a href="#pagar" class="btn-primary">Recargar TUC ahora →</a>
+        <a href="#como" class="btn-secondary">¿Cómo funciona?</a>
+      </div>
+    </div>
+
+    <!-- TUC CARD MOCK -->
+    <div class="tuc-card">
+      <div class="tuc-card-shine"></div>
+      <div class="tuc-chip"></div>
+      <div class="tuc-balance-label">Saldo disponible</div>
+      <div class="tuc-balance"><sup>$</sup>12.350</div>
+      <div class="tuc-balance-change">↑ Recarga de $10.000 hoy</div>
+      <div class="tuc-divider"></div>
+      <div class="tuc-row">
+        <div>
+          <div class="tuc-name">María José Rodríguez</div>
+          <div class="tuc-number">TUC · 2024 · ●●●● 7821</div>
+        </div>
+        <div class="tuc-logo-area">
+          <div class="tuc-logo-text">UC</div>
+        </div>
+      </div>
+      <div class="tuc-stats">
+        <div class="tuc-stat">
+          <div class="tuc-stat-label">Ingresos este mes</div>
+          <div class="tuc-stat-value">14 entradas</div>
+        </div>
+        <div class="tuc-stat">
+          <div class="tuc-stat-label">Último pago</div>
+          <div class="tuc-stat-value">Hoy, 08:32</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">$2.350</div>
+      <div class="stat-desc">Tarifa por ingreso al campus</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">+30min</div>
+      <div class="stat-desc">Tiempo perdido en fila al tótem</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24/7</div>
+      <div class="stat-desc">Disponible en cualquier momento</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2 seg</div>
+      <div class="stat-desc">Lo que demora recargar online</div>
+    </div>
+  </div>
+</div>
+
+<!-- EL PROBLEMA -->
+<section class="problema" id="problema">
+  <div class="section-inner">
+    <div class="section-label">El problema actual</div>
+    <h2>El tótem es un cuello de botella</h2>
+    <p class="lead">El sistema actual obliga a los estudiantes a pagar presencialmente, generando filas y pérdida de tiempo innecesaria.</p>
+
+    <div class="problema-grid">
+      <div class="pain-points">
+        <div class="pain-point">
+          <div class="pain-icon">🕐</div>
+          <div>
+            <div class="pain-title">Filas en horario pico</div>
+            <div class="pain-desc">En las mañanas y al mediodía se forman largas colas frente a los tótems, especialmente lunes y miércoles.</div>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon">💸</div>
+          <div>
+            <div class="pain-title">Deuda automática al entrar</div>
+            <div class="pain-desc">Si tu TUC no tiene saldo, igual puedes entrar, pero quedas debiendo $2.350 que solo puedes pagar presencialmente.</div>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon">📍</div>
+          <div>
+            <div class="pain-title">Solo efectivo o tarjeta física</div>
+            <div class="pain-desc">Los tótems no permiten pago a distancia. Tienes que ir hasta el lugar, en el horario que sea.</div>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon">🔄</div>
+          <div>
+            <div class="pain-title">Visitas repetidas al tótem</div>
+            <div class="pain-desc">Como nadie recarga de más, todos vuelven al tótem constantemente, perpetuando el problema.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="totem-visual">
+        <div class="queue-row">
+          <span class="person">🧍</span><span class="person">🧍</span><span class="person">🧍</span>
+        </div>
+        <div class="queue-row">
+          <span class="person">🧍</span><span class="person">🧍</span>
+        </div>
+        <div class="queue-row">
+          <span class="person">🧍</span>
+        </div>
+        <div class="totem-box">
+          <div class="totem-screen"></div>
+          <div class="totem-slot"></div>
+        </div>
+        <div class="totem-label">Tótem de pago</div>
+        <div class="totem-time">~32 min</div>
+        <div class="totem-time-label">tiempo promedio en fila</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="como" id="como">
+  <div class="section-inner">
+    <div class="section-label">Cómo funciona EstacionaUC</div>
+    <h2>Tan simple como en 4 pasos</h2>
+    <p class="lead">Desde ingresar al campus hasta salir sin deudas, todo desde tu celular.</p>
+
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-icon">🎓</div>
+        <div class="step-num">1</div>
+        <h3>Inicia sesión con tu cuenta UC</h3>
+        <p>Usa tu correo @uc.cl y contraseña institucional para acceder de forma segura.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">💳</div>
+        <div class="step-num">2</div>
+        <h3>Vincula tu TUC</h3>
+        <p>Ingresa el número de tu tarjeta universitaria. Solo se hace una vez.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">💵</div>
+        <div class="step-num">3</div>
+        <h3>Elige el monto a recargar</h3>
+        <p>Paga la deuda pendiente ($2.350) o recarga un monto mayor para futuras entradas.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">✅</div>
+        <div class="step-num">4</div>
+        <h3>¡Listo! Saldo actualizado</h3>
+        <p>Tu TUC se recarga en segundos. Puedes entrar y salir del campus sin pasar por el tótem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO DE PAGO -->
+<section class="app-section" id="pagar">
+  <div class="section-inner">
+    <div class="section-label">Portal de recarga</div>
+    <h2>Recarga tu TUC ahora</h2>
+    <p class="lead">Paga tu deuda pendiente o agrega saldo extra para evitar las filas el resto del mes.</p>
+
+    <div class="app-layout">
+
+      <!-- FORMULARIO -->
+      <div class="form-card">
+        <div class="form-tabs">
+          <button class="tab-btn active" onclick="setTab('pagar-deuda', this)">Pagar deuda</button>
+          <button class="tab-btn" onclick="setTab('recargar', this)">Recargar saldo</button>
+        </div>
+
+        <!-- TAB: PAGAR DEUDA -->
+        <div id="tab-pagar-deuda">
+          <div class="deuda-badge">
+            <div class="deuda-badge-icon">⚠️</div>
+            <div class="deuda-badge-text">
+              Tienes una deuda pendiente de <strong>$2.350</strong> por tu último ingreso al estacionamiento.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email-deuda">Correo UC</label>
+            <input type="email" placeholder="tu.nombre@uc.cl" id="email-deuda" autocomplete="email">
+            <div class="error-msg" id="error-email-deuda"></div>
+          </div>
+          <div class="form-group">
+            <label for="tuc-deuda">Número de TUC</label>
+            <input type="text" placeholder="Ej: 2024-0001234-7" id="tuc-deuda" autocomplete="off">
+            <div class="error-msg" id="error-tuc-deuda"></div>
+          </div>
+          <div class="form-group">
+            <label>Método de pago</label>
+            <div class="payment-methods">
+              <button class="pm-btn selected" onclick="selectPM(this)">💳 Débito/Crédito</button>
+              <button class="pm-btn" onclick="selectPM(this)">📱 Webpay</button>
+              <button class="pm-btn" onclick="selectPM(this)">🏦 Transferencia</button>
+            </div>
+          </div>
+          <div class="total-box">
+            <div>
+              <div class="total-label">Total a pagar</div>
+            </div>
+            <div class="total-amount">$2.350</div>
+          </div>
+          <button class="btn-pagar" onclick="procesarPago('deuda', '$2.350')">
+            🔒 Pagar deuda pendiente
+          </button>
+          <div class="secure-badges">
+            <span class="secure-badge">🔐 SSL cifrado</span>
+            <span class="secure-badge">✓ Transbank</span>
+            <span class="secure-badge">✓ Cuenta UC</span>
+          </div>
+        </div>
+
+        <!-- TAB: RECARGAR -->
+        <div id="tab-recargar" style="display:none;">
+          <div class="form-group">
+            <label for="email-recarga">Correo UC</label>
+            <input type="email" placeholder="tu.nombre@uc.cl" id="email-recarga" autocomplete="email">
+            <div class="error-msg" id="error-email-recarga"></div>
+          </div>
+          <div class="form-group">
+            <label for="tuc-recarga">Número de TUC</label>
+            <input type="text" placeholder="Ej: 2024-0001234-7" id="tuc-recarga" autocomplete="off">
+            <div class="error-msg" id="error-tuc-recarga"></div>
+          </div>
+          <div class="form-group">
+            <label>Monto a recargar</label>
+            <input type="number" id="monto-input" placeholder="Ingresa monto" oninput="actualizarTotal(this.value)" min="2350">
+            <div class="monto-grid">
+              <button class="monto-btn" onclick="seleccionarMonto(2350, this)">$2.350<br><small style="color:var(--gris);font-size:0.7rem">1 ingreso</small></button>
+              <button class="monto-btn" onclick="seleccionarMonto(11750, this)">$11.750<br><small style="color:var(--gris);font-size:0.7rem">5 ingresos</small></button>
+              <button class="monto-btn" onclick="seleccionarMonto(23500, this)">$23.500<br><small style="color:var(--gris);font-size:0.7rem">10 ingresos</small></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Método de pago</label>
+            <div class="payment-methods">
+              <button class="pm-btn selected" onclick="selectPM(this)">💳 Débito/Crédito</button>
+              <button class="pm-btn" onclick="selectPM(this)">📱 Webpay</button>
+              <button class="pm-btn" onclick="selectPM(this)">🏦 Transferencia</button>
+            </div>
+          </div>
+          <div class="total-box">
+            <div>
+              <div class="total-label">Total a pagar</div>
+            </div>
+            <div class="total-amount" id="total-display">$0</div>
+          </div>
+          <button class="btn-pagar" onclick="procesarPago('recarga', document.getElementById('total-display').textContent)">
+            🔒 Confirmar recarga
+          </button>
+          <div class="secure-badges">
+            <span class="secure-badge">🔐 SSL cifrado</span>
+            <span class="secure-badge">✓ Transbank</span>
+            <span class="secure-badge">✓ Cuenta UC</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO SIDE -->
+      <div class="info-side">
+
+        <div class="tarifa-highlight">
+          <div>
+            <div class="tarifa-label">Tarifa por ingreso</div>
+            <div class="tarifa-precio">$2.350</div>
+            <div class="tarifa-sub">Aplica con TUC sin saldo</div>
+          </div>
+          <div class="tarifa-icon">🚗</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">💡</div>
+            <h3>Tip: recarga más y olvídate</h3>
+          </div>
+          <p>Si recargas para 10 ingresos ($23.500), evitas volver a pensar en el estacionamiento por todo el mes. Sin filas, sin estrés.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">🛡️</div>
+            <h3>Pago 100% seguro</h3>
+          </div>
+          <ul>
+            <li>Procesado por Transbank / Webpay</li>
+            <li>Autenticación con cuenta UC oficial</li>
+            <li>Conexión cifrada SSL/TLS</li>
+            <li>Comprobante por correo institucional</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">⏱️</div>
+            <h3>¿Cuándo se actualiza el saldo?</h3>
+          </div>
+          <p>El saldo en tu TUC se actualiza en tiempo real. Al pagar aquí, puedes ingresar al campus en segundos. No tienes que ir al tótem.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div class="section-label">Preguntas frecuentes</div>
+    <h2>Lo que debes saber</h2>
+
+    <div class="faq-grid">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">¿Necesito registrarme cada vez? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">No. Una vez que vinculas tu TUC con tu correo UC, el sistema la recuerda. Solo debes iniciar sesión en tus próximas visitas.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">¿Puedo pagar si no debo nada? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">Sí. Puedes hacer una recarga preventiva para tener saldo antes de ingresar al campus y nunca quedar con deuda.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">¿Qué pasa si pago y el saldo no se refleja? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">El saldo se actualiza en tiempo real. Si hay algún problema, escríbenos al soporte indicado en el comprobante que recibirás por correo.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">¿Puedo pagar la deuda de otro estudiante? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">Sí, mientras ingreses el número de TUC correcto. El pago aplica al saldo del titular de esa tarjeta.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">¿Puedo pedir reembolso del saldo? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">El saldo recargado permanece en tu TUC indefinidamente. Por políticas de la universidad, no se realizan reembolsos en efectivo.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">¿Esto es oficial de la PUC? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">Este es un prototipo de propuesta estudiantil para mejora del sistema. La implementación oficial requeriría integración con los sistemas de la universidad.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">EstacionaUC</div>
+      <div class="footer-sub">Pago online de estacionamiento · Campus San Joaquín</div>
+    </div>
+    <div class="footer-links">
+      <a href="#">Términos de uso</a>
+      <a href="#">Privacidad</a>
+      <a href="#">Soporte</a>
+      <a href="#">Contacto</a>
+    </div>
+  </div>
+  <div class="footer-disc">
+    Propuesta estudiantil para mejora del sistema de estacionamiento de la Pontificia Universidad Católica de Chile · Campus San Joaquín.
+    No afiliada oficialmente a la Dirección de Servicios UC.
+  </div>
+</footer>
+
+<!-- MODAL ÉXITO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-icon">✅</div>
+    <h3>¡Pago exitoso!</h3>
+    <p>Tu TUC ha sido recargada. Ya puedes ingresar al estacionamiento sin pasar por el tótem.</p>
+    <div class="modal-details" id="modal-details"></div>
+    <button class="btn-close-modal" onclick="cerrarModal()">Cerrar y volver</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
