@@ -227,6 +227,38 @@ git push origin main
 
 ---
 
+### Día 2 — Backend Node.js + Express
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 3
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `backend/package.json` inicializado con dependencias: express, dotenv, cors, helmet, morgan, express-validator
+- [x] `src/server.js` — punto de entrada con middleware global (helmet, cors, morgan, json)
+- [x] `src/routes/payment.routes.js` — rutas POST /deuda y POST /recharge con validaciones
+- [x] `src/routes/tuc.routes.js` — ruta GET /:tucNumber
+- [x] `src/routes/auth.routes.js` — ruta POST /login
+- [x] `src/controllers/payment.controller.js` — mock: devuelve folio y detalle del pago
+- [x] `src/controllers/tuc.controller.js` — mock: consulta saldo desde objeto en memoria
+- [x] `src/controllers/auth.controller.js` — mock: devuelve token temporal
+- [x] `src/middleware/auth.middleware.js` — valida Bearer token (mock) y adjunta req.user
+- [x] `src/middleware/errorHandler.js` — manejador centralizado de errores
+- [x] `.env` creado localmente con variables de desarrollo (no subido a GitHub)
+- [x] Commit: "feat: backend base con Express y endpoints mock"
+- [x] Push a GitHub
+
+**Problemas encontrados:**
+- Node.js no estaba instalado en el sistema. Los archivos fueron creados correctamente; el usuario debe instalar Node.js y ejecutar `npm install` antes de correr el servidor.
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Instalar Node.js (ver instrucciones abajo)
+- Ejecutar Prompt 4 (Base de datos SQLite)
+
+---
+
 ### Día 1 — Frontend base modularizado
 **Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 2
@@ -263,7 +295,7 @@ git push origin main
 |---|--------|--------|-------|
 | 1 | Setup inicial y GitHub | ✅ Completado | 29/03/2026 |
 | 2 | Frontend base modularizado | ✅ Completado | 29/03/2026 |
-| 3 | Backend Node.js + Express | ⏳ Pendiente | — |
+| 3 | Backend Node.js + Express | ✅ Completado | 29/03/2026 |
 | 4 | Base de datos SQLite | ⏳ Pendiente | — |
 | 5 | Integración Webpay | ⏳ Pendiente | — |
 | 6 | Autenticación JWT | ⏳ Pendiente | — |
@@ -273,4 +305,4 @@ git push origin main
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 2 completado*
+*Última actualización: 29/03/2026 — Prompt 3 completado*
