@@ -8,6 +8,7 @@ const morgan  = require('morgan');
 const paymentRoutes = require('./routes/payment.routes');
 const tucRoutes     = require('./routes/tuc.routes');
 const authRoutes    = require('./routes/auth.routes');
+const userRoutes    = require('./routes/user.routes');
 const errorHandler  = require('./middleware/errorHandler');
 
 const app  = express();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: false })); // necesario para el return de
 app.use('/api/payment', paymentRoutes);
 app.use('/api/tuc',     tucRoutes);
 app.use('/api/auth',    authRoutes);
+app.use('/api/user',    userRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {

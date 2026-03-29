@@ -73,8 +73,9 @@ function updateNav() {
   const user = getUser();
   if (user) {
     authNavItem.innerHTML = `
-      <span style="color:rgba(255,255,255,0.6);font-size:0.82rem;">${user.email}</span>
-      <button onclick="logout()" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--blanco);border-radius:6px;padding:0.35rem 0.85rem;font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:0.5rem;">Salir</button>
+      <a href="dashboard.html" style="color:rgba(255,255,255,0.75);font-size:0.85rem;font-weight:500;text-decoration:none;">${user.email}</a>
+      <a href="dashboard.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--blanco);border-radius:6px;padding:0.35rem 0.85rem;font-size:0.8rem;font-weight:500;text-decoration:none;margin-left:0.5rem;">Mi cuenta</a>
+      <button onclick="logout()" style="background:transparent;border:none;color:rgba(255,255,255,0.45);font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:0.25rem;padding:0.35rem 0.5rem;">Salir</button>
     `;
   } else {
     authNavItem.innerHTML = `<a href="login.html?redirect=index.html%23pagar" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:var(--blanco);padding:0.4rem 1rem;border-radius:6px;font-size:0.85rem;font-weight:500;text-decoration:none;">Iniciar sesión</a>`;

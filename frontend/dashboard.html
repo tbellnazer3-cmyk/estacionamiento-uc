@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EstacionaUC — Mi Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: var(--crema); }
+
+    /* ─── Layout principal ─── */
+    .dash-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6.5rem 2.5rem 4rem;
+    }
+
+    /* ─── Header del dashboard ─── */
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .dash-greeting { font-family: 'DM Serif Display', serif; font-size: 1.9rem; line-height: 1.2; }
+    .dash-greeting span { color: var(--azul); }
+    .dash-sub { color: var(--gris); font-size: 0.9rem; margin-top: 0.3rem; }
+
+    /* ─── Cards resumen ─── */
+    .dash-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .dash-card {
+      background: var(--blanco);
+      border: 1px solid var(--gris-claro);
+      border-radius: 18px;
+      padding: 1.75rem;
+      transition: box-shadow 0.2s;
+    }
+    .dash-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+    .dash-card-label {
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gris);
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    .dash-card-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--texto);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .dash-card-sub { font-size: 0.8rem; color: var(--gris); }
+
+    /* Tarjeta de saldo — destacada */
+    .card-saldo {
+      background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul) 100%);
+      border-color: transparent;
+      grid-column: span 1;
+    }
+    .card-saldo .dash-card-label { color: rgba(255,255,255,0.6); }
+    .card-saldo .dash-card-value { color: var(--blanco); font-size: 2.4rem; }
+    .card-saldo .dash-card-sub   { color: rgba(255,255,255,0.5); }
+
+    /* Tarjeta de deuda */
+    .card-deuda-activa {
+      border-color: rgba(220,38,38,0.25);
+      background: rgba(220,38,38,0.04);
+    }
+    .card-deuda-activa .dash-card-value { color: var(--rojo); }
+
+    /* Tarjeta OK */
+    .card-ok .dash-card-value { color: var(--verde); }
+
+    /* ─── Botones de acción rápida ─── */
+    .dash-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .btn-dash-primary {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: var(--dorado); color: var(--azul-oscuro);
+      border: none; border-radius: 9px;
+      padding: 0.75rem 1.5rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-dash-primary:hover { background: var(--dorado-claro); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(200,169,81,0.35); }
+    .btn-dash-secondary {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: var(--blanco); color: var(--azul);
+      border: 1.5px solid var(--azul); border-radius: 9px;
+      padding: 0.75rem 1.5rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-dash-secondary:hover { background: rgba(0,61,165,0.05); }
+    .btn-dash-ghost {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: transparent; color: var(--gris);
+      border: 1.5px solid var(--gris-claro); border-radius: 9px;
+      padding: 0.75rem 1.5rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-dash-ghost:hover { border-color: var(--gris); color: var(--texto); }
+
+    /* ─── Historial ─── */
+    .dash-section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .history-table {
+      background: var(--blanco);
+      border: 1px solid var(--gris-claro);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .history-header {
+      display: grid;
+      grid-template-columns: 1fr 80px 110px 100px 90px;
+      padding: 0.85rem 1.5rem;
+      background: var(--crema);
+      border-bottom: 1px solid var(--gris-claro);
+      font-size: 0.73rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gris);
+    }
+    .history-row {
+      display: grid;
+      grid-template-columns: 1fr 80px 110px 100px 90px;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--gris-claro);
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .history-row:last-child { border-bottom: none; }
+    .history-row:hover { background: var(--crema); }
+
+    .tx-type-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .badge-recarga { background: rgba(22,163,74,0.1);  color: var(--verde); }
+    .badge-deuda   { background: rgba(220,38,38,0.09); color: var(--rojo);  }
+
+    .tx-status {
+      font-size: 0.78rem; font-weight: 600;
+      padding: 0.2rem 0.6rem; border-radius: 100px;
+    }
+    .status-approved { background: rgba(22,163,74,0.1);  color: var(--verde); }
+    .status-pending  { background: rgba(200,169,81,0.15); color: #92620a; }
+    .status-failed   { background: rgba(220,38,38,0.09); color: var(--rojo);  }
+
+    .tx-folio  { font-size: 0.8rem; color: var(--gris); font-family: monospace; }
+    .tx-amount { font-weight: 600; font-size: 0.9rem; }
+    .tx-date   { font-size: 0.8rem; color: var(--gris); }
+
+    /* ─── Paginación ─── */
+    .pagination { display: flex; align-items: center; gap: 0.5rem; justify-content: center; margin-top: 1.25rem; }
+    .page-btn {
+      min-width: 36px; height: 36px;
+      border: 1.5px solid var(--gris-claro);
+      border-radius: 8px; background: var(--blanco);
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--texto); transition: all 0.15s;
+    }
+    .page-btn:hover:not(:disabled) { border-color: var(--azul); color: var(--azul); }
+    .page-btn.active { background: var(--azul); border-color: var(--azul); color: var(--blanco); font-weight: 700; }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .page-info { font-size: 0.82rem; color: var(--gris); padding: 0 0.5rem; }
+
+    /* ─── Estado vacío / carga ─── */
+    .state-empty, .state-loading, .state-error {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--gris);
+    }
+    .state-icon  { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .state-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.35rem; color: var(--texto); }
+    .state-desc  { font-size: 0.85rem; }
+
+    /* ─── Skeleton loader ─── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--gris-claro) 25%, #f0f0f0 50%, var(--gris-claro) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ─── Deuda banner ─── */
+    .deuda-banner {
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(220,38,38,0.06);
+      border: 1px solid rgba(220,38,38,0.2);
+      border-radius: 14px; padding: 1.1rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .deuda-banner-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .deuda-banner-text { flex: 1; font-size: 0.88rem; line-height: 1.5; }
+    .deuda-banner-text strong { color: var(--rojo); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .dash-wrap { padding: 5.5rem 1.25rem 3rem; }
+      .dash-cards { grid-template-columns: 1fr; }
+      .history-header { display: none; }
+      .history-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.3rem;
+        padding: 0.9rem 1rem;
+      }
+      .history-row .tx-folio { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <a href="index.html" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;">
+      <div class="nav-logo-icon">🅿️</div>
+      <div>
+        <div class="nav-logo-text">EstacionaUC</div>
+        <div class="nav-logo-sub">San Joaquín · Campus</div>
+      </div>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="index.html#pagar">Recargar TUC</a>
+    <span id="nav-auth-item"></span>
+  </div>
+</nav>
+
+<div class="dash-wrap">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div>
+      <div class="dash-greeting" id="dash-greeting">Hola, <span id="dash-name">cargando...</span></div>
+      <div class="dash-sub" id="dash-tuc">TUC: —</div>
+    </div>
+    <div style="font-size:0.8rem;color:var(--gris);" id="dash-updated"></div>
+  </div>
+
+  <!-- Banner de deuda (se muestra solo si hay deuda) -->
+  <div class="deuda-banner" id="deuda-banner" style="display:none;">
+    <div class="deuda-banner-icon">⚠️</div>
+    <div class="deuda-banner-text">
+      Tienes una deuda pendiente de <strong id="deuda-amount">$2.350</strong> por tu último ingreso al estacionamiento.
+    </div>
+    <a href="index.html#pagar" class="btn-dash-primary" style="white-space:nowrap;">Pagar ahora →</a>
+  </div>
+
+  <!-- Cards de resumen -->
+  <div class="dash-cards">
+    <div class="dash-card card-saldo">
+      <div class="dash-card-label">Saldo disponible</div>
+      <div class="dash-card-value" id="card-balance">—</div>
+      <div class="dash-card-sub" id="card-balance-sub">Tarjeta TUC</div>
+    </div>
+    <div class="dash-card" id="card-deuda-wrap">
+      <div class="dash-card-label">Estado de deuda</div>
+      <div class="dash-card-value" id="card-deuda">—</div>
+      <div class="dash-card-sub" id="card-deuda-sub">—</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">Transacciones totales</div>
+      <div class="dash-card-value" id="card-tx-count">—</div>
+      <div class="dash-card-sub">Pagos e ingresos</div>
+    </div>
+  </div>
+
+  <!-- Acciones rápidas -->
+  <div class="dash-actions" id="dash-actions">
+    <a href="index.html#pagar" class="btn-dash-primary" id="btn-action-primary">🔒 Pagar deuda</a>
+    <a href="index.html#pagar" class="btn-dash-secondary">💳 Recargar saldo</a>
+    <a href="index.html" class="btn-dash-ghost">← Volver al inicio</a>
+  </div>
+
+  <!-- Historial -->
+  <div class="dash-section-title">Historial de movimientos</div>
+  <div class="history-table" id="history-container">
+    <div class="state-loading">
+      <div class="state-icon">⏳</div>
+      <div class="state-title">Cargando historial...</div>
+    </div>
+  </div>
+
+  <div class="pagination" id="pagination" style="display:none;"></div>
+
+</div><!-- /dash-wrap -->
+
+<script>
+  const API = 'http://localhost:3000/api';
+
+  // ─── Auth guard ───────────────────────────────────────────────────────────────
+  const token = sessionStorage.getItem('auth_token');
+  if (!token) {
+    window.location.href = 'login.html?redirect=dashboard.html';
+  }
+
+  function getUser() {
+    try { return JSON.parse(sessionStorage.getItem('auth_user')); } catch { return null; }
+  }
+
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  // ─── Nav ──────────────────────────────────────────────────────────────────────
+  function updateNav() {
+    const user = getUser();
+    const el   = document.getElementById('nav-auth-item');
+    if (!el) return;
+    if (user) {
+      el.innerHTML = `
+        <span style="color:rgba(255,255,255,0.6);font-size:0.82rem;">${user.email}</span>
+        <button onclick="logout()" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--blanco);border-radius:6px;padding:0.35rem 0.85rem;font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:0.5rem;">Salir</button>
+      `;
+    }
+  }
+
+  // ─── Formato ─────────────────────────────────────────────────────────────────
+  const fmt = {
+    clp: v  => '$' + Number(v).toLocaleString('es-CL'),
+    date: s => {
+      if (!s) return '—';
+      const d = new Date(s.replace(' ', 'T') + 'Z');
+      return d.toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' })
+           + ', ' + d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    },
+    shortDate: s => {
+      if (!s) return '—';
+      const d = new Date(s.replace(' ', 'T') + 'Z');
+      return d.toLocaleDateString('es-CL', { day: 'numeric', month: 'short' });
+    },
+  };
+
+  // ─── Load dashboard ───────────────────────────────────────────────────────────
+  async function loadDashboard() {
+    try {
+      const res  = await fetch(`${API}/user/dashboard`, { headers: { Authorization: `Bearer ${token}` } });
+      if (res.status === 401) { logout(); return; }
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      const { user, tuc, recent_transactions } = json.data;
+
+      // Header
+      const firstName = user.email.split('@')[0].split('.')[0];
+      document.getElementById('dash-name').textContent    = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+      document.getElementById('dash-tuc').textContent     = 'TUC: ' + user.tuc_number;
+      document.getElementById('dash-updated').textContent = tuc.updated_at ? 'Actualizado ' + fmt.date(tuc.updated_at) : '';
+
+      // Balance card
+      document.getElementById('card-balance').textContent     = fmt.clp(tuc.balance);
+      document.getElementById('card-balance-sub').textContent = tuc.balance >= 2350 ? 'Listo para ingresar' : 'Saldo insuficiente';
+
+      // Deuda card
+      const cardDeudaWrap = document.getElementById('card-deuda-wrap');
+      if (tuc.has_debt) {
+        cardDeudaWrap.classList.add('card-deuda-activa');
+        document.getElementById('card-deuda').textContent     = fmt.clp(tuc.debt_amount);
+        document.getElementById('card-deuda-sub').textContent = 'Deuda pendiente';
+        document.getElementById('deuda-banner').style.display = 'flex';
+        document.getElementById('deuda-amount').textContent   = fmt.clp(tuc.debt_amount);
+        document.getElementById('btn-action-primary').textContent = '🔒 Pagar deuda ' + fmt.clp(tuc.debt_amount);
+      } else {
+        cardDeudaWrap.classList.add('card-ok');
+        document.getElementById('card-deuda').textContent     = 'Al día ✓';
+        document.getElementById('card-deuda-sub').textContent = 'Sin deuda pendiente';
+        document.getElementById('btn-action-primary').textContent = '↑ Recargar saldo';
+      }
+
+      // TX count (carga historia completa para el total)
+      document.getElementById('card-tx-count').textContent = recent_transactions.length < 10
+        ? recent_transactions.length
+        : '10+';
+
+      // Render historial reciente
+      renderHistoryRows(recent_transactions, document.getElementById('history-container'), false);
+
+      // Cargar historial completo con paginación
+      loadHistory(1);
+
+    } catch (err) {
+      document.getElementById('history-container').innerHTML = `
+        <div class="state-error">
+          <div class="state-icon">⚠️</div>
+          <div class="state-title">Error al cargar los datos</div>
+          <div class="state-desc">${err.message}</div>
+        </div>`;
+    }
+  }
+
+  // ─── Load history (paginado) ──────────────────────────────────────────────────
+  let currentPage = 1;
+
+  async function loadHistory(page) {
+    currentPage = page;
+    const container = document.getElementById('history-container');
+    const pagDiv    = document.getElementById('pagination');
+
+    container.innerHTML = `<div class="state-loading"><div class="state-icon">⏳</div><div class="state-title">Cargando...</div></div>`;
+
+    try {
+      const res  = await fetch(`${API}/user/history?page=${page}&pageSize=10`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.status === 401) { logout(); return; }
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      const { rows, total, totalPages } = json.data;
+
+      // TX count real
+      document.getElementById('card-tx-count').textContent = total;
+
+      renderHistoryRows(rows, container, true);
+      renderPagination(page, totalPages, pagDiv);
+
+    } catch (err) {
+      container.innerHTML = `
+        <div class="state-error">
+          <div class="state-icon">⚠️</div>
+          <div class="state-title">Error al cargar el historial</div>
+          <div class="state-desc">${err.message}</div>
+        </div>`;
+    }
+  }
+
+  // ─── Render helpers ───────────────────────────────────────────────────────────
+  function renderHistoryRows(rows, container, withHeader) {
+    if (!rows || rows.length === 0) {
+      container.innerHTML = `
+        <div class="state-empty">
+          <div class="state-icon">📭</div>
+          <div class="state-title">Sin movimientos aún</div>
+          <div class="state-desc">Tus pagos y recargas aparecerán aquí.</div>
+        </div>`;
+      return;
+    }
+
+    const header = withHeader ? `
+      <div class="history-header">
+        <div>Descripción</div>
+        <div>Tipo</div>
+        <div>Folio</div>
+        <div>Monto</div>
+        <div>Estado</div>
+      </div>` : '';
+
+    const rows_html = rows.map(tx => `
+      <div class="history-row">
+        <div>
+          <div style="font-size:0.88rem;font-weight:500;">${tx.type === 'recarga' ? 'Recarga de saldo' : 'Pago de deuda'}</div>
+          <div class="tx-date">${fmt.shortDate(tx.created_at)}</div>
+        </div>
+        <div>
+          <span class="tx-type-badge ${tx.type === 'recarga' ? 'badge-recarga' : 'badge-deuda'}">
+            ${tx.type === 'recarga' ? '↑ Recarga' : '↓ Deuda'}
+          </span>
+        </div>
+        <div class="tx-folio">${tx.folio || '—'}</div>
+        <div class="tx-amount" style="color:${tx.type === 'recarga' ? 'var(--verde)' : 'var(--rojo)'}">
+          ${tx.type === 'recarga' ? '+' : '-'}${fmt.clp(tx.amount)}
+        </div>
+        <div>
+          <span class="tx-status status-${tx.status}">
+            ${ tx.status === 'approved' ? 'Aprobado' : tx.status === 'pending' ? 'Pendiente' : 'Fallido' }
+          </span>
+        </div>
+      </div>`).join('');
+
+    container.innerHTML = header + rows_html;
+  }
+
+  function renderPagination(page, totalPages, container) {
+    if (totalPages <= 1) { container.style.display = 'none'; return; }
+    container.style.display = 'flex';
+
+    const pages = [];
+    // Siempre mostrar máx 5 páginas
+    let start = Math.max(1, page - 2);
+    let end   = Math.min(totalPages, start + 4);
+    if (end - start < 4) start = Math.max(1, end - 4);
+
+    pages.push(`<button class="page-btn" onclick="loadHistory(${page - 1})" ${page === 1 ? 'disabled' : ''}>‹</button>`);
+    for (let p = start; p <= end; p++) {
+      pages.push(`<button class="page-btn ${p === page ? 'active' : ''}" onclick="loadHistory(${p})">${p}</button>`);
+    }
+    pages.push(`<button class="page-btn" onclick="loadHistory(${page + 1})" ${page === totalPages ? 'disabled' : ''}>›</button>`);
+    pages.push(`<span class="page-info">Página ${page} de ${totalPages}</span>`);
+
+    container.innerHTML = pages.join('');
+  }
+
+  // ─── Init ─────────────────────────────────────────────────────────────────────
+  updateNav();
+  loadDashboard();
+</script>
+</body>
+</html>
