@@ -1,8 +1,9 @@
 const { validationResult } = require('express-validator');
 const { validateUCEmail }  = require('../middleware/auth.middleware');
+const User                 = require('../models/User');
+const TucBalance           = require('../models/TucBalance');
 
 // POST /api/auth/login
-// Autentica un estudiante con correo UC y devuelve un token mock.
 async function login(req, res, next) {
   try {
     const errors = validationResult(req);
@@ -19,20 +20,32 @@ async function login(req, res, next) {
       });
     }
 
-    // TODO (Prompt 6): verificar contraseña con bcrypt y emitir JWT real
-    // Por ahora aceptamos cualquier contraseña no vacía
-    if (!password || password.length < 1) {
-      return res.status(401).json({ success: false, error: 'Contraseña incorrecta.' });
+    const user = User.findByEmail(email);
+    if (!user) {
+      return res.status(401).json({ success: false, error: 'Credenciales incorrectas.' });
     }
+
+    // TODO (Prompt 6): verificar password con bcrypt
+    // Por ahora aceptamos cualquier contraseña no vacía
+    if (!password) {
+      return res.status(401).json({ success: false, error: 'Credenciales incorrectas.' });
+    }
+
+    // TODO (Prompt 6): emitir JWT real con jsonwebtoken
+    const token = 'mock-jwt-' + Buffer.from(email).toString('base64') + '-' + Date.now();
+
+    const balance = TucBalance.findByTuc(user.tuc_number);
 
     res.status(200).json({
       success: true,
-      message: 'Login exitoso (mock).',
+      message: 'Login exitoso.',
       data: {
-        token: 'mock-jwt-token-' + Date.now(),
+        token,
         user: {
-          email,
-          tuc_number: '2024-0001234-7',
+          id:         user.id,
+          email:      user.email,
+          tuc_number: user.tuc_number,
+          balance:    balance ? balance.balance : 0,
         },
       },
     });
