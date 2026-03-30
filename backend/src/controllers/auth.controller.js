@@ -3,6 +3,7 @@ const { validateUCEmail }  = require('../middleware/auth.middleware');
 const User                 = require('../models/User');
 const TucBalance           = require('../models/TucBalance');
 const authService          = require('../services/auth.service');
+const emailService         = require('../services/email.service');
 
 // POST /api/auth/register
 async function register(req, res, next) {
@@ -38,6 +39,9 @@ async function register(req, res, next) {
     }
 
     const token = authService.generateToken({ id: user.id, email: user.email, tuc_number });
+
+    // Correo de bienvenida (sin bloquear la respuesta)
+    emailService.sendWelcomeEmail(email, { tuc_number });
 
     res.status(201).json({
       success: true,

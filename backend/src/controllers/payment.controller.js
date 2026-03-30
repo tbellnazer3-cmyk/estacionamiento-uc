@@ -3,6 +3,7 @@ const Transaction  = require('../models/Transaction');
 const TucBalance   = require('../models/TucBalance');
 const User         = require('../models/User');
 const transbank    = require('../services/transbank.service');
+const emailService = require('../services/email.service');
 
 const DEUDA_MONTO  = 2350;
 const BACKEND_URL  = process.env.BACKEND_URL  || 'http://localhost:3000';
@@ -111,6 +112,26 @@ async function returnPayment(req, res, next) {
     if (transbank.estaAutorizado(commitResponse)) {
       Transaction.updateStatus(tx.id, 'approved');
       TucBalance.addBalance(tx.tuc_number, tx.amount);
+
+      // Notificaciones por correo (sin bloquear el redirect)
+      const user       = User.findByTuc(tx.tuc_number);
+      const newBalance = TucBalance.findByTuc(tx.tuc_number);
+      if (user) {
+        emailService.sendPaymentConfirmation(user.email, {
+          folio:     tx.folio,
+          type:      tx.type,
+          amount:    tx.amount,
+          tuc_number: tx.tuc_number,
+          auth_code: commitResponse.authorization_code || '',
+          date:      tx.created_at,
+        });
+        if (newBalance && newBalance.balance < DEUDA_MONTO) {
+          emailService.sendLowBalanceAlert(user.email, {
+            tuc_number: tx.tuc_number,
+            balance:    newBalance.balance,
+          });
+        }
+      }
 
       const params = new URLSearchParams({
         status:    'success',

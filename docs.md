@@ -271,6 +271,56 @@ git push origin main
 
 ---
 
+### Día 7 — Notificaciones por correo
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 8
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `nodemailer ^6.9.13` agregado a `backend/package.json`
+- [x] `src/services/email.service.js` creado con:
+  - Transporter Gmail SMTP (modo silencioso si EMAIL_USER/EMAIL_PASSWORD no están configurados)
+  - Template HTML `templatePagoConfirmado` — folio, tipo, monto, TUC, código de autorización, fecha, estado
+  - Template HTML `templateSaldoBajo` — TUC, saldo actual vs mínimo requerido ($2.350)
+  - Template HTML `templateBienvenida` — correo, TUC, descripción de funcionalidades
+  - Funciones públicas: `sendPaymentConfirmation`, `sendLowBalanceAlert`, `sendWelcomeEmail`
+- [x] `src/controllers/payment.controller.js` — tras pago aprobado en `returnPayment`:
+  - Envía confirmación de pago al email del estudiante
+  - Si el nuevo saldo < $2.350, envía alerta de saldo bajo automáticamente
+- [x] `src/controllers/auth.controller.js` — tras registro exitoso envía correo de bienvenida
+- [x] `.env.example` ya incluía `EMAIL_USER`, `EMAIL_PASSWORD`, `EMAIL_FROM` (de sesión anterior)
+- [x] Commit: "feat: notificaciones por correo con Nodemailer"
+- [x] Push a GitHub
+
+**Cómo configurar Gmail SMTP:**
+1. Activar verificación en 2 pasos en tu cuenta Google
+2. Ir a `Cuenta Google → Seguridad → Contraseñas de aplicaciones`
+3. Crear una App Password para "Correo / Otro"
+4. Agregar al `.env`:
+   ```
+   EMAIL_USER=tu_correo@gmail.com
+   EMAIL_PASSWORD=xxxx xxxx xxxx xxxx   # App Password (16 chars)
+   EMAIL_FROM=EstacionaUC
+   ```
+
+**Correos que se envían automáticamente:**
+| Evento | Template | Destinatario |
+|--------|----------|--------------|
+| Pago aprobado | Confirmación con folio y detalle | Email del estudiante |
+| Saldo post-pago < $2.350 | Alerta de saldo bajo | Email del estudiante |
+| Registro de cuenta | Bienvenida | Email del nuevo usuario |
+
+**Problemas encontrados:**
+- Ninguno
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Ejecutar Prompt 9 (Deploy y producción)
+
+---
+
 ### Día 6 — Dashboard del estudiante
 **Fecha:** 29/03/2026
 **Prompt ejecutado:** Prompt 7
@@ -469,9 +519,9 @@ git push origin main
 | 5 | Integración Webpay | ✅ Completado | 29/03/2026 |
 | 6 | Autenticación JWT | ✅ Completado | 29/03/2026 |
 | 7 | Dashboard del estudiante | ✅ Completado | 29/03/2026 |
-| 8 | Notificaciones por correo | ⏳ Pendiente | — |
+| 8 | Notificaciones por correo | ✅ Completado | 29/03/2026 |
 | 9 | Deploy y producción | ⏳ Pendiente | — |
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 7 completado*
+*Última actualización: 29/03/2026 — Prompt 8 completado*
