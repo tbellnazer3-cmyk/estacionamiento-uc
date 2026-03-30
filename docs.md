@@ -121,6 +121,124 @@ Copiar `.env.example` a `.env` y completar los valores.
 
 ---
 
+## 🚀 Guía de Deploy
+
+### Backend — Railway (recomendado)
+
+1. Crear cuenta en [railway.app](https://railway.app) e instalar la CLI:
+   ```bash
+   npm install -g @railway/cli
+   railway login
+   ```
+
+2. Desde la carpeta `/backend`:
+   ```bash
+   railway init        # crear proyecto
+   railway up          # primer deploy
+   ```
+
+3. Configurar variables de entorno en el dashboard de Railway:
+   ```
+   NODE_ENV=production
+   PORT=3000
+   DB_URL=/data/database.sqlite
+   JWT_SECRET=<clave-aleatoria-64-bytes>
+   FRONTEND_URL=https://tu-app.vercel.app
+   BACKEND_URL=https://tu-app.up.railway.app
+   TRANSBANK_ENV=production
+   TRANSBANK_API_KEY=<key-real>
+   TRANSBANK_COMMERCE_CODE=<code-real>
+   EMAIL_USER=<correo>
+   EMAIL_PASSWORD=<app-password>
+   EMAIL_FROM=EstacionaUC
+   RATE_LIMIT_WINDOW_MS=900000
+   RATE_LIMIT_MAX=100
+   ```
+
+4. Agregar un volumen persistente montado en `/data` para la base de datos SQLite.
+
+5. El `Dockerfile` en `/backend` es detectado automáticamente por Railway.
+
+> **Alternativa:** Render.com — conectar el repo de GitHub, indicar que la raíz del servicio es `/backend` y agregar las mismas variables de entorno.
+
+---
+
+### Frontend — Vercel (recomendado)
+
+1. Crear cuenta en [vercel.com](https://vercel.com) e instalar la CLI:
+   ```bash
+   npm install -g vercel
+   vercel login
+   ```
+
+2. Desde la carpeta `/frontend`:
+   ```bash
+   vercel          # seguir el asistente interactivo
+   ```
+   - Framework: **Other**
+   - Build command: (vacío, es HTML estático)
+   - Output directory: `.` (raíz)
+
+3. Actualizar la URL del backend en `.env` de Railway:
+   ```
+   FRONTEND_URL=https://tu-proyecto.vercel.app
+   ```
+
+4. Actualizar la constante `API_BASE` en `frontend/js/api.js` con la URL real del backend:
+   ```js
+   const API_BASE = 'https://tu-app.up.railway.app/api';
+   ```
+
+> **Alternativa:** Netlify — arrastrar la carpeta `/frontend` al dashboard o conectar el repo.
+
+---
+
+### Checklist pre-deploy
+
+- [ ] Generar `JWT_SECRET` nuevo: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+- [ ] Cambiar `TRANSBANK_ENV=production` y cargar credenciales reales de Transbank
+- [ ] Verificar que `.env` real NO está en el repositorio (`git status`)
+- [ ] Ejecutar `npm audit` y resolver vulnerabilidades críticas
+- [ ] Probar el health check: `GET /api/health`
+- [ ] Confirmar que `FRONTEND_URL` en el backend coincide con el dominio real de Vercel
+
+---
+
+## 🔒 Rate Limiting
+
+Configurado en `server.js` con `express-rate-limit`:
+
+| Parámetro | Valor por defecto | Variable `.env` |
+|-----------|-------------------|-----------------|
+| Ventana de tiempo | 15 minutos | `RATE_LIMIT_WINDOW_MS` |
+| Máximo de requests | 100 por IP | `RATE_LIMIT_MAX` |
+
+Respuesta cuando se supera el límite:
+```json
+{ "success": false, "error": "Demasiadas peticiones. Intenta de nuevo en 15 minutos." }
+```
+
+---
+
+## 🐳 Docker
+
+Construir y correr el backend localmente con Docker:
+
+```bash
+cd backend
+
+# Construir imagen
+docker build -t estacionauc-backend .
+
+# Correr con volumen para la DB y archivo .env
+docker run -p 3000:3000 \
+  --env-file ../.env \
+  -v estacionauc-data:/data \
+  estacionauc-backend
+```
+
+---
+
 ## 🧪 Cómo probar pagos en Sandbox (Webpay Plus)
 
 ### Requisitos previos
@@ -268,6 +386,34 @@ git push origin main
 - [x] README.md con descripción del proyecto e instrucciones de instalación
 - [x] Primer commit: "chore: setup inicial del proyecto"
 - [x] Push a GitHub (rama main)
+
+---
+
+### Día 8 — Deploy y producción
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 9
+**Estado:** ✅ Completado
+
+**Tareas completadas:**
+- [x] `.env.example` ampliado con variables de producción: `NODE_ENV`, `TRANSBANK_ENV`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX`
+- [x] `express-rate-limit ^7.4.0` agregado a `backend/package.json`
+- [x] `src/server.js` actualizado:
+  - Rate limiting: 100 req / 15 min por IP (configurable vía `.env`)
+  - CORS con lista blanca dinámica (`FRONTEND_URL` puede ser CSV de múltiples orígenes)
+  - Morgan en modo `combined` en producción, `dev` en desarrollo
+- [x] `backend/Dockerfile` creado (Node 20 Alpine, compilación de `better-sqlite3`, volumen `/data`)
+- [x] `backend/.dockerignore` creado
+- [x] Commit: "chore: configuración para producción"
+- [x] Push a GitHub
+
+**Problemas encontrados:**
+- `npm audit` no pudo ejecutarse (Node.js aún no instalado localmente). Ejecutar manualmente tras `npm install`.
+
+**Skills creadas:**
+- Ninguna nueva
+
+**Próximo paso:**
+- Ver guía de deploy más abajo para Railway + Vercel
 
 ---
 
@@ -520,8 +666,8 @@ git push origin main
 | 6 | Autenticación JWT | ✅ Completado | 29/03/2026 |
 | 7 | Dashboard del estudiante | ✅ Completado | 29/03/2026 |
 | 8 | Notificaciones por correo | ✅ Completado | 29/03/2026 |
-| 9 | Deploy y producción | ⏳ Pendiente | — |
+| 9 | Deploy y producción | ✅ Completado | 29/03/2026 |
 
 ---
 
-*Última actualización: 29/03/2026 — Prompt 8 completado*
+*Última actualización: 29/03/2026 — Proyecto completo (Prompts 1–9) ✅*
