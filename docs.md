@@ -371,21 +371,43 @@ git push origin main
 
 ## 📅 Bitácora del Proyecto
 
-### Día 0 — Setup inicial
-**Fecha:** 29/03/2026
-**Estado:** ✅ Completado
+> Las entradas están en orden cronológico descendente (más reciente primero).
 
-**Tareas completadas:**
-- [x] Diseño inicial del sitio (estacionamiento-uc.html monolítico existente)
-- [x] CLAUDE.md creado con reglas del proyecto
-- [x] docs.md creado con documentación base
-- [x] Repositorio GitHub creado: https://github.com/tbellnazer3-cmyk/estacionamiento-uc
-- [x] Estructura de carpetas inicializada (frontend/, backend/, skills/)
-- [x] .gitignore para Node.js creado
-- [x] .env.example con placeholders de variables de entorno
-- [x] README.md con descripción del proyecto e instrucciones de instalación
-- [x] Primer commit: "chore: setup inicial del proyecto"
-- [x] Push a GitHub (rama main)
+---
+
+### Sesión final — Resumen del día 29/03/2026
+**Fecha:** 29/03/2026
+**Estado:** ✅ Proyecto completo — todos los prompts ejecutados
+
+**Todo lo realizado hoy (sesión completa):**
+
+| Prompt | Descripción | Commit |
+|--------|-------------|--------|
+| Prompt 1 | Setup inicial, estructura de carpetas, GitHub | `chore: setup inicial del proyecto` |
+| Prompt 2 | Frontend modularizado (HTML/CSS/JS separados, favicon, validación) | `feat: frontend base separado en módulos` |
+| Prompt 3 | Backend Express con endpoints mock | `feat: backend base con Express y endpoints mock` |
+| Prompt 4 | Base de datos SQLite con modelos y seed | `feat: base de datos SQLite con modelos y seed` |
+| Prompt 5 | Integración Webpay Plus (sandbox Transbank) | `feat: integración Webpay Plus en ambiente sandbox` |
+| Prompt 6 | Autenticación JWT + login.html | `feat: sistema de autenticación con JWT` |
+| Prompt 7 | Dashboard del estudiante con historial paginado | `feat: dashboard del estudiante con historial` |
+| Prompt 8 | Notificaciones por correo con Nodemailer | `feat: notificaciones por correo con Nodemailer` |
+| Prompt 9 | Configuración de producción, rate limiting, Dockerfile | `chore: configuración para producción` |
+
+**Estado del repositorio:** https://github.com/tbellnazer3-cmyk/estacionamiento-uc
+
+**Para correr el proyecto localmente:**
+```bash
+# 1. Instalar Node.js LTS desde https://nodejs.org
+
+# 2. Backend
+cd backend
+npm install
+npm run seed   # carga datos de prueba
+npm run dev    # http://localhost:3000
+
+# 3. Frontend
+# Abrir frontend/index.html con Live Server en VS Code (http://localhost:5500)
+```
 
 ---
 
@@ -399,21 +421,17 @@ git push origin main
 - [x] `express-rate-limit ^7.4.0` agregado a `backend/package.json`
 - [x] `src/server.js` actualizado:
   - Rate limiting: 100 req / 15 min por IP (configurable vía `.env`)
-  - CORS con lista blanca dinámica (`FRONTEND_URL` puede ser CSV de múltiples orígenes)
+  - CORS con lista blanca dinámica (`FRONTEND_URL` soporta múltiples orígenes separados por coma)
   - Morgan en modo `combined` en producción, `dev` en desarrollo
 - [x] `backend/Dockerfile` creado (Node 20 Alpine, compilación de `better-sqlite3`, volumen `/data`)
 - [x] `backend/.dockerignore` creado
-- [x] Commit: "chore: configuración para producción"
+- [x] Instrucciones de deploy en `docs.md`: Railway (backend) + Vercel (frontend) + Docker local
+- [x] Checklist pre-deploy documentado
+- [x] Commit: `"chore: configuración para producción"`
 - [x] Push a GitHub
 
 **Problemas encontrados:**
-- `npm audit` no pudo ejecutarse (Node.js aún no instalado localmente). Ejecutar manualmente tras `npm install`.
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Ver guía de deploy más abajo para Railway + Vercel
+- `npm audit` no pudo ejecutarse (Node.js no instalado localmente). Ejecutar manualmente con `npm install && npm audit` en `/backend/`.
 
 ---
 
@@ -425,45 +443,33 @@ git push origin main
 **Tareas completadas:**
 - [x] `nodemailer ^6.9.13` agregado a `backend/package.json`
 - [x] `src/services/email.service.js` creado con:
-  - Transporter Gmail SMTP (modo silencioso si EMAIL_USER/EMAIL_PASSWORD no están configurados)
-  - Template HTML `templatePagoConfirmado` — folio, tipo, monto, TUC, código de autorización, fecha, estado
+  - Transporter Gmail SMTP (modo silencioso si `EMAIL_USER`/`EMAIL_PASSWORD` no están en `.env`)
+  - Template HTML `templatePagoConfirmado` — folio, tipo, monto, TUC, código de autorización, fecha
   - Template HTML `templateSaldoBajo` — TUC, saldo actual vs mínimo requerido ($2.350)
-  - Template HTML `templateBienvenida` — correo, TUC, descripción de funcionalidades
+  - Template HTML `templateBienvenida` — correo, TUC registrada, descripción de funcionalidades
   - Funciones públicas: `sendPaymentConfirmation`, `sendLowBalanceAlert`, `sendWelcomeEmail`
 - [x] `src/controllers/payment.controller.js` — tras pago aprobado en `returnPayment`:
   - Envía confirmación de pago al email del estudiante
   - Si el nuevo saldo < $2.350, envía alerta de saldo bajo automáticamente
-- [x] `src/controllers/auth.controller.js` — tras registro exitoso envía correo de bienvenida
-- [x] `.env.example` ya incluía `EMAIL_USER`, `EMAIL_PASSWORD`, `EMAIL_FROM` (de sesión anterior)
-- [x] Commit: "feat: notificaciones por correo con Nodemailer"
+- [x] `src/controllers/auth.controller.js` — tras registro exitoso, envía correo de bienvenida
+- [x] `.env.example` incluye `EMAIL_USER`, `EMAIL_PASSWORD`, `EMAIL_FROM`
+- [x] Commit: `"feat: notificaciones por correo con Nodemailer"`
 - [x] Push a GitHub
 
+**Correos disparados automáticamente:**
+| Evento | Template | Cuándo |
+|--------|----------|--------|
+| Pago aprobado | Confirmación con folio y detalle | Después de `returnPayment` exitoso |
+| Saldo post-pago < $2.350 | Alerta de saldo insuficiente | Mismo momento que la confirmación |
+| Nuevo registro | Bienvenida | Después de `register` exitoso |
+
 **Cómo configurar Gmail SMTP:**
-1. Activar verificación en 2 pasos en tu cuenta Google
-2. Ir a `Cuenta Google → Seguridad → Contraseñas de aplicaciones`
-3. Crear una App Password para "Correo / Otro"
-4. Agregar al `.env`:
-   ```
-   EMAIL_USER=tu_correo@gmail.com
-   EMAIL_PASSWORD=xxxx xxxx xxxx xxxx   # App Password (16 chars)
-   EMAIL_FROM=EstacionaUC
-   ```
-
-**Correos que se envían automáticamente:**
-| Evento | Template | Destinatario |
-|--------|----------|--------------|
-| Pago aprobado | Confirmación con folio y detalle | Email del estudiante |
-| Saldo post-pago < $2.350 | Alerta de saldo bajo | Email del estudiante |
-| Registro de cuenta | Bienvenida | Email del nuevo usuario |
-
-**Problemas encontrados:**
-- Ninguno
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Ejecutar Prompt 9 (Deploy y producción)
+```
+# Cuenta Google → Seguridad → Verificación en 2 pasos → Contraseñas de aplicaciones
+EMAIL_USER=tu_correo@gmail.com
+EMAIL_PASSWORD=xxxx xxxx xxxx xxxx   # App Password de 16 caracteres
+EMAIL_FROM=EstacionaUC
+```
 
 ---
 
@@ -473,30 +479,18 @@ git push origin main
 **Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [x] `src/controllers/user.controller.js` — `getDashboard` (saldo + deuda + 10 recientes) y `getHistory` (paginado)
+- [x] `src/controllers/user.controller.js` — `getDashboard` (saldo + deuda + 10 recientes) y `getHistory` (paginado, máx 50/página)
 - [x] `src/routes/user.routes.js` — `GET /api/user/dashboard` y `GET /api/user/history`
 - [x] `src/server.js` — registrada la ruta `/api/user`
 - [x] `frontend/dashboard.html` — dashboard completo con:
-  - Card saldo TUC (gradiente azul destacado)
-  - Card estado de deuda (rojo si hay deuda, verde si está al día)
-  - Card total de transacciones
+  - Card saldo TUC, card estado de deuda, card total de transacciones
   - Banner de deuda con botón "Pagar ahora" (visible solo si hay deuda)
-  - Botones de acción rápida (pagar / recargar / inicio)
   - Tabla historial con badge de tipo, monto coloreado, folio, estado y fecha
   - Paginación dinámica
-  - Auth guard: redirige a login si no hay sesión
-- [x] `frontend/js/app.js` — nav actualizado con link "Mi cuenta" → dashboard.html
-- [x] Commit: "feat: dashboard del estudiante con historial"
+  - Auth guard: redirige a `login.html` si no hay sesión activa
+- [x] `frontend/js/app.js` — nav actualizado con link "Mi cuenta" → `dashboard.html`
+- [x] Commit: `"feat: dashboard del estudiante con historial"`
 - [x] Push a GitHub
-
-**Problemas encontrados:**
-- Ninguno
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Ejecutar Prompt 8 (Notificaciones por correo)
 
 ---
 
@@ -506,27 +500,14 @@ git push origin main
 **Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [x] `jsonwebtoken` y `bcryptjs` agregados a `package.json`
-- [x] `src/services/auth.service.js` — hashPassword (bcrypt), comparePassword, generateToken (24h), verifyToken
-- [x] `src/middleware/auth.middleware.js` — `requireAuth` reescrito con `verifyToken` real; detecta `TokenExpiredError`
+- [x] `src/services/auth.service.js` — `hashPassword` (bcrypt 10 rounds), `comparePassword`, `generateToken` (24h), `verifyToken`
+- [x] `src/middleware/auth.middleware.js` — `requireAuth` con detección de `TokenExpiredError` (401 diferenciado)
 - [x] `src/controllers/auth.controller.js` — `register`, `login`, `verify` conectados a DB + bcrypt + JWT
-- [x] `src/routes/auth.routes.js` — rutas `POST /register`, `POST /login`, `GET /verify`
-- [x] `src/db/seed.js` — actualizado para usar `hashPassword` de auth.service (hashes bcrypt reales)
-- [x] `frontend/login.html` — página de login/registro con tabs, validación inline, toggle contraseña
-- [x] `frontend/js/app.js` — `procesarPago` redirige a login si no hay sesión; `updateNav` muestra email/logout; `prefillForm` pre-carga email y TUC del usuario logueado
-- [x] `frontend/index.html` — `<span id="nav-auth-item">` en nav para estado de sesión
-- [x] JWT se guarda en `sessionStorage` (no `localStorage`)
-- [x] Commit: "feat: sistema de autenticación con JWT"
+- [x] `src/db/seed.js` — actualizado con hashes bcrypt reales (contraseña: `password123`)
+- [x] `frontend/login.html` — página login/registro con tabs, validación inline, toggle contraseña
+- [x] `frontend/js/app.js` — `procesarPago` redirige a login si no hay sesión; JWT en `sessionStorage`
+- [x] Commit: `"feat: sistema de autenticación con JWT"`
 - [x] Push a GitHub
-
-**Problemas encontrados:**
-- Ninguno
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Ejecutar Prompt 7 (Dashboard del estudiante)
 
 ---
 
@@ -536,29 +517,14 @@ git push origin main
 **Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [x] `transbank-sdk` agregado a `package.json`
-- [x] `src/services/transbank.service.js` — encapsula `crearTransaccion`, `confirmarTransaccion`, `estaAutorizado`
-- [x] Ambiente de integración configurado con `IntegrationCommerceCodes.WEBPAY_PLUS` y `IntegrationApiKeys.WEBPAY`
-- [x] Flujo completo implementado: init → Webpay → return → confirmar → actualizar saldo
-- [x] `POST /api/payment/init` — crea transacción en DB (pending) e inicia en Webpay, devuelve `webpay_url`
-- [x] `GET|POST /api/payment/return` — recibe token_ws, llama commit, actualiza DB y TUC, redirige al frontend
-- [x] `POST /api/payment/confirm` — permite consultar estado por folio
-- [x] `Transaction.findByWebpayToken` y `Transaction.updateWebpayToken` agregados al modelo
-- [x] `express.urlencoded` habilitado en server.js (necesario para form POST de Webpay)
-- [x] `frontend/js/app.js` actualizado: `procesarPago` llama `/api/payment/init` y redirige a Webpay URL
+- [x] `src/services/transbank.service.js` — `crearTransaccion`, `confirmarTransaccion`, `estaAutorizado`
+- [x] Ambiente Integration con `IntegrationCommerceCodes.WEBPAY_PLUS` y `IntegrationApiKeys.WEBPAY`
+- [x] Flujo completo: `POST /api/payment/init` → Webpay → `POST /api/payment/return` → redirect al frontend
+- [x] Manejo de cancelaciones (`TBK_TOKEN`) y timeouts
+- [x] `express.urlencoded` habilitado para el form POST de Webpay
 - [x] `frontend/webpay-return.html` — página de resultado (éxito / rechazado / cancelado / error)
-- [x] `BACKEND_URL` agregado a `.env` y `.env.example`
-- [x] Commit: "feat: integración Webpay Plus en ambiente sandbox"
+- [x] Commit: `"feat: integración Webpay Plus en ambiente sandbox"`
 - [x] Push a GitHub
-
-**Problemas encontrados:**
-- Ninguno
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Ejecutar Prompt 6 (Autenticación JWT)
 
 ---
 
@@ -568,27 +534,13 @@ git push origin main
 **Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [x] `better-sqlite3` agregado a `package.json` (+ script `npm run seed`)
-- [x] `src/models/schema.sql` — tablas `users`, `tuc_balances`, `transactions` con índices y constraints
-- [x] `src/db/database.js` — conexión singleton, aplica schema al iniciar, cierra al apagar
-- [x] `src/models/User.js` — findByEmail, findById, findByTuc, create, emailExists, tucExists
-- [x] `src/models/TucBalance.js` — findByTuc, upsert, addBalance
-- [x] `src/models/Transaction.js` — create, findById, findByFolio, updateStatus, findByUser, findByUserPaginated
-- [x] Controllers `payment`, `tuc` y `auth` conectados a la DB real (reemplaza datos mock)
+- [x] `src/models/schema.sql` — tablas `users`, `tuc_balances`, `transactions` con índices y PRAGMA WAL
+- [x] `src/db/database.js` — conexión singleton con cierre graceful al apagar
+- [x] Modelos: `User.js`, `TucBalance.js`, `Transaction.js`
+- [x] Controllers conectados a DB real (reemplaza mocks)
 - [x] `src/db/seed.js` — 3 usuarios, 3 saldos TUC, 4 transacciones de prueba
-- [x] Commit: "feat: base de datos SQLite con modelos y seed"
+- [x] Commit: `"feat: base de datos SQLite con modelos y seed"`
 - [x] Push a GitHub
-
-**Problemas encontrados:**
-- Ninguno
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Instalar Node.js si aún no está instalado
-- Ejecutar `npm install && npm run seed` en `/backend/`
-- Ejecutar Prompt 5 (Integración Webpay)
 
 ---
 
@@ -598,29 +550,15 @@ git push origin main
 **Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [x] `backend/package.json` inicializado con dependencias: express, dotenv, cors, helmet, morgan, express-validator
-- [x] `src/server.js` — punto de entrada con middleware global (helmet, cors, morgan, json)
-- [x] `src/routes/payment.routes.js` — rutas POST /deuda y POST /recharge con validaciones
-- [x] `src/routes/tuc.routes.js` — ruta GET /:tucNumber
-- [x] `src/routes/auth.routes.js` — ruta POST /login
-- [x] `src/controllers/payment.controller.js` — mock: devuelve folio y detalle del pago
-- [x] `src/controllers/tuc.controller.js` — mock: consulta saldo desde objeto en memoria
-- [x] `src/controllers/auth.controller.js` — mock: devuelve token temporal
-- [x] `src/middleware/auth.middleware.js` — valida Bearer token (mock) y adjunta req.user
+- [x] `backend/package.json` con dependencias: express, dotenv, cors, helmet, morgan, express-validator
+- [x] `src/server.js` con middleware global (helmet, cors, morgan, json, urlencoded)
+- [x] Rutas y controllers mock para `/api/payment`, `/api/tuc`, `/api/auth`
 - [x] `src/middleware/errorHandler.js` — manejador centralizado de errores
-- [x] `.env` creado localmente con variables de desarrollo (no subido a GitHub)
-- [x] Commit: "feat: backend base con Express y endpoints mock"
+- [x] Commit: `"feat: backend base con Express y endpoints mock"`
 - [x] Push a GitHub
 
-**Problemas encontrados:**
-- Node.js no estaba instalado en el sistema. Los archivos fueron creados correctamente; el usuario debe instalar Node.js y ejecutar `npm install` antes de correr el servidor.
-
-**Skills creadas:**
-- Ninguna nueva
-
-**Próximo paso:**
-- Instalar Node.js (ver instrucciones abajo)
-- Ejecutar Prompt 4 (Base de datos SQLite)
+**Notas:**
+- Node.js no estaba instalado localmente. Instalar desde nodejs.org antes de `npm install`.
 
 ---
 
@@ -630,23 +568,28 @@ git push origin main
 **Estado:** ✅ Completado
 
 **Tareas completadas:**
-- [x] `estacionamiento-uc.html` movido y adaptado como `frontend/index.html`
-- [x] CSS extraído a `frontend/css/styles.css` (estilos + clases de error de validación)
-- [x] JS extraído a `frontend/js/app.js` (lógica de tabs, pagos, validación)
-- [x] `frontend/js/api.js` creado con estructura lista para conectar al backend (Prompt 3)
-- [x] Favicon SVG creado en `frontend/assets/favicon.svg` (icono P azul/dorado)
-- [x] Validación mejorada: regex estricta para @uc.cl / @puc.cl, formato TUC, mensajes inline
-- [x] Commit: "feat: frontend base separado en módulos"
+- [x] HTML/CSS/JS separados en `frontend/index.html`, `css/styles.css`, `js/app.js`, `js/api.js`
+- [x] Favicon SVG en `frontend/assets/favicon.svg`
+- [x] Validación: regex estricta `@uc.cl` / `@puc.cl`, formato TUC `XXXX-XXXXXXX-X`, mensajes inline
+- [x] Commit: `"feat: frontend base separado en módulos"`
 - [x] Push a GitHub
 
-**Problemas encontrados:**
-- Ninguno
+---
 
-**Skills creadas:**
-- Ninguna nueva (primera iteración de cada patrón)
+### Día 0 — Setup inicial
+**Fecha:** 29/03/2026
+**Prompt ejecutado:** Prompt 1
+**Estado:** ✅ Completado
 
-**Próximo paso:**
-- Ejecutar Prompt 3 (Backend Node.js + Express)
+**Tareas completadas:**
+- [x] `CLAUDE.md` creado con reglas y prompts del proyecto
+- [x] `docs.md` creado con documentación base
+- [x] Repositorio GitHub: https://github.com/tbellnazer3-cmyk/estacionamiento-uc
+- [x] Estructura de carpetas: `frontend/`, `backend/`, `skills/`
+- [x] `.gitignore` para Node.js, `.env.example` con todos los placeholders
+- [x] `README.md` con descripción e instrucciones de instalación
+- [x] Commit: `"chore: setup inicial del proyecto"`
+- [x] Push a GitHub (rama `main`)
 
 ---
 
@@ -670,4 +613,4 @@ git push origin main
 
 ---
 
-*Última actualización: 29/03/2026 — Proyecto completo (Prompts 1–9) ✅*
+*Última actualización: 29/03/2026 — Proyecto completo. Todos los Prompts 1–9 ejecutados. ✅*
